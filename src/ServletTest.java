@@ -7,7 +7,7 @@ public class ServletTest extends HttpServlet {
 
     public void init() throws ServletException {
         // Do required initialization
-        message = "Hello World";
+        message = "Hello World This is a test";
     }
 
     public void doGet(HttpServletRequest request, HttpServletResponse response)
