@@ -7,7 +7,6 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="Model.Test" %>
-<% Test tests[] = (Test[]) request.getAttribute("data"); %>
 <html>
 <head>
     <title>Display</title>
@@ -49,6 +48,10 @@
 </head>
 <body>
     <div class="container">
+        <%
+            Test tests[] = (Test[]) request.getAttribute("data");
+            if (tests != null && tests[0] != null) {
+        %>
         <table>
             <tr class="header">
                 <th>Names</th>
@@ -57,6 +60,9 @@
             <tr><td><%= t.getName() %></td></tr>
             <% } %>
         </table>
+        <% } else { %>
+            <h3>Record(s) not found!</h3>
+        <% } %>
     </div>
 </body>
 </html>

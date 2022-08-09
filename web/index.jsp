@@ -19,9 +19,11 @@
     </style>
   </head>
   <body>
-    <form action="/hello" method="post">
-      <input type="text" name="name">
-      <input type="submit">
+    <form action="/names" method="">
+      <input type="text" name="name" placeholder="enter a name">
+<%--      <input type="submit" value="add">--%>
+      <button formaction="/names" formmethod="post">add</button>
+      <button formaction="/names" formmethod="get">search</button>
     </form>
   </body>
 </html>

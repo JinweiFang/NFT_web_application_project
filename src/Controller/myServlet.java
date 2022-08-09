@@ -24,12 +24,15 @@ public class myServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        Test names[];
+        Test names[] = null;
 
         // Check if URL contains id
         if (req.getParameterMap().containsKey("id")) {
             int ID = Integer.parseInt(req.getParameter("id"));
             names = new Test[]{repo.getName(ID)};
+        } else if (req.getParameterMap().containsKey("name")) {
+            String name = req.getParameter("name");
+            names = new Test[]{repo.getName(name)};
         } else {
             names = repo.getAllNames();
         }

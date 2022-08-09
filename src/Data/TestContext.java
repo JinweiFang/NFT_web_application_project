@@ -54,6 +54,27 @@ public class TestContext implements iTest {
     }
 
     @Override
+    public Test getName(String name) {
+        Test result = null;
+        String sql = "SELECT ID, name, created_on FROM test WHERE name = ? ";
+
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, name);
+            ResultSet rs = pstmt.executeQuery();
+
+            if(rs.next()) {
+                result = new Test(rs.getInt(1), rs.getString(2), rs.getLong(3));
+            }
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        return result;
+    }
+
+    @Override
     public void addName(Test item) {
         String sql = "INSERT INTO test(name, created_on) VALUES(?,?)";
 
