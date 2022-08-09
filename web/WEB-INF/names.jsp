@@ -18,7 +18,7 @@
         }
 
         table, th, td {
-            /*border: 1px solid black;*/
+            border: 1px solid black;
             border-collapse: collapse;
             text-align: center;
         }
@@ -55,9 +55,13 @@
         <table>
             <tr class="header">
                 <th>Names</th>
+                <th>Created On</th>
             </tr>
             <% for(Test t : tests) { %>
-            <tr><td><%= t.getName() %></td></tr>
+            <tr>
+                <td><%= t.getName() %></td>
+                <td><%= Utils.DateUtils.formateDateTime(t.getCreatedOn()) %></td>
+            </tr>
             <% } %>
         </table>
         <% } else { %>
