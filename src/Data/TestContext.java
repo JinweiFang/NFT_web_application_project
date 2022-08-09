@@ -2,9 +2,8 @@ package Data;
 
 import Model.Test;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.ArrayList;
 
 public class TestContext implements iTest {
     private Connection conn;
@@ -15,12 +14,43 @@ public class TestContext implements iTest {
 
     @Override
     public Test[] getAllNames() {
-        return new Test[0];
+        ArrayList<Test> result = new ArrayList<>();
+        String sql = "SELECT ID, name, created_on FROM test";
+
+        try {
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+
+            while (rs.next()) {
+                result.add(new Test(rs.getInt(1), rs.getString(2), rs.getLong(3)));
+            }
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        return result.toArray(new Test[0]);
     }
 
     @Override
     public Test getName(int ID) {
-        return null;
+        Test result = null;
+        String sql = "SELECT ID, name, created_on FROM test WHERE ID = ? ";
+
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, ID);
+            ResultSet rs = pstmt.executeQuery();
+
+            if(rs.next()) {
+                result = new Test(rs.getInt(1), rs.getString(2), rs.getLong(3));
+            }
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        return result;
     }
 
     @Override

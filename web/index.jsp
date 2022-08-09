@@ -19,7 +19,7 @@
     </style>
   </head>
   <body>
-    <form action="/hello">
+    <form action="/hello" method="post">
       <input type="text" name="name">
       <input type="submit">
     </form>

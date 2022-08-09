@@ -12,7 +12,6 @@ public class Connect {
     }
 
     private Connection init() {
-
         // Need it for recognizing SQLite dependency
         try {
             Class.forName("org.sqlite.JDBC");
@@ -28,11 +27,11 @@ public class Connect {
         } catch (SQLException e) {
             System.out.println("Error: " + e.getMessage());
         }
+
         return conn;
     }
 
     public Connection getConn() {
         return this.conn;
     }
-
 }
