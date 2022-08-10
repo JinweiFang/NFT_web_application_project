@@ -2,7 +2,7 @@ package Data;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.SQLException;
+
 
 public class Connect {
     private final Connection conn;
@@ -13,11 +13,8 @@ public class Connect {
 
     public Connect(String dbname) {
         switch (dbname.toLowerCase()) {
-            case "postgres":
-                this.conn = PostgresDB();
-                break;
-            default:
-                this.conn = SQLiteDB();
+            case "postgres" -> this.conn = PostgresDB();
+            default -> this.conn = SQLiteDB();
         }
     }
 
