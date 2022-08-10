@@ -15,12 +15,12 @@ import Data.Repo.*;
 import Model.Test;
 
 
-@WebServlet(name = "names", urlPatterns = {"/names"})
+// @WebServlet(name = "names", urlPatterns = {"/names"})
 public class myServlet extends HttpServlet {
     private iTestRepo repo;
 
     public void init() throws ServletException {
-        repo = new TestRepo(new Connect().getConn());
+        repo = new TestRepo(new Connect("postgres").getConn());
     }
 
     @Override

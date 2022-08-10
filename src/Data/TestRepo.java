@@ -34,7 +34,12 @@ public class TestRepo implements iTestRepo {
         return result.toArray(new Test[0]);
     }
 
-    // Created for re-usability
+    /**
+     * Created for re-usability
+     * @param type 0 for id, 1 for name
+     * @param value the value of the type
+     * @return return the record if found
+     */
     private Test find(short type, Object value) {
         Test result = null;
         String sql = (type == 0) ? "SELECT ID, name, created_on FROM test WHERE ID = ? " :

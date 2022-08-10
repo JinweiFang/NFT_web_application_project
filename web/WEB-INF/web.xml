@@ -5,11 +5,11 @@
          version="4.0">
 
     <servlet>
-        <servlet-name>ServletTest</servlet-name>
-        <servlet-class>ServletTest</servlet-class>
+        <servlet-name>myServlet</servlet-name>
+        <servlet-class>Controller.myServlet</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>ServletTest</servlet-name>
-        <url-pattern>/HelloWorldTest</url-pattern>
+        <servlet-name>myServlet</servlet-name>
+        <url-pattern>/names</url-pattern>
     </servlet-mapping>
 </web-app>
