@@ -1,4 +1,4 @@
-package Data;
+package Data.Repo;
 
 public interface iRepo<E, ID> {
     E[] findAll();
