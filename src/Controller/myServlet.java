@@ -20,7 +20,7 @@ public class myServlet extends HttpServlet {
     private iTestRepo repo;
 
     public void init() throws ServletException {
-        repo = new TestRepo(new Connect("postgres").getConn());
+        repo = new TestRepo(new Connect().getConn());
     }
 
     @Override
@@ -40,7 +40,7 @@ public class myServlet extends HttpServlet {
 
         // Pass data to jsp page
         req.setAttribute("data", names);
-        RequestDispatcher dispatcher = req.getRequestDispatcher("/WEB-INF/names.jsp");
+        RequestDispatcher dispatcher = req.getRequestDispatcher("/WEB-INF/View/names.jsp");
         dispatcher.forward(req, resp);
     }
 

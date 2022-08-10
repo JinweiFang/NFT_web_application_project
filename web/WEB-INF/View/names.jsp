@@ -7,66 +7,74 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="Model.Test" %>
-<html>
+<% Test tests[] = (Test[]) request.getAttribute("data"); %>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <title>Display</title>
-    <style>
-        .container {
-            display: flex;
-            flex-direction: row;
-            justify-content: center;
-        }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NFT Web Project</title>
 
-        table, th, td {
-            border: 1px solid black;
-            border-collapse: collapse;
-            text-align: center;
-        }
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/bootstrap/css/bootstrap.min.css">
 
-        table {
-            border: 1px solid black;
-        }
-
-        tr:nth-child(even) {
-            background-color: #eaeaea;
-        }
-
-        tr.header {
-            background-color: #2a2a2a;
-        }
-
-        th {
-            color: whitesmoke;
-            padding: 10px;
-        }
-
-        td {
-            padding: 10px;
-            min-width: 200px;
-        }
-    </style>
+    <!-- Custom Import -->
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/main.css">
 </head>
 <body>
-    <div class="container">
-        <%
-            Test tests[] = (Test[]) request.getAttribute("data");
-            if (tests != null && tests[0] != null) {
-        %>
-        <table>
-            <tr class="header">
-                <th>Names</th>
-                <th>Created On</th>
+
+<header class="p-3 bg-dark text-white">
+    <nav class="container">
+        <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+            <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
+                <svg class="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap">
+                    <use xlink:href="#bootstrap"/>
+                </svg>
+            </a>
+
+            <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+                <li><a href="#" class="nav-link px-2 text-secondary">Home</a></li>
+                <li><a href="#" class="nav-link px-2 text-white">FAQs</a></li>
+                <li><a href="#" class="nav-link px-2 text-white">About</a></li>
+            </ul>
+
+            <div class="text-end">
+                <button type="button" class="btn btn-outline-light me-2">Login</button>
+                <button type="button" class="btn btn-warning">Sign-up</button>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<main class="container-fluid">
+    <div class="container-sm">
+        <% if (tests != null && tests[0] != null) {%>
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Name</th>
+                <th scope="col">Created On</th>
             </tr>
+            </thead>
+            <tbody>
             <% for(Test t : tests) { %>
             <tr>
+                <th scope="row"><%= t.getID() %></th>
                 <td><%= t.getName() %></td>
                 <td><%= Utils.DateUtils.formateDateTime(t.getCreatedOn()) %></td>
             </tr>
             <% } %>
+            </tbody>
         </table>
         <% } else { %>
-            <h3>Record(s) not found!</h3>
+        <div class="alert alert-danger" role="alert">
+            Record(s) not found!
+        </div>
         <% } %>
     </div>
+</main>
+<!-- Bootstrap JS -->
+<script src="${pageContext.request.contextPath}/assets/bootstrap/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
