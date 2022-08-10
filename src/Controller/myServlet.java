@@ -11,15 +11,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import Data.*;
+import Data.Repo.*;
 import Model.Test;
 
 
 @WebServlet(name = "names", urlPatterns = {"/names"})
 public class myServlet extends HttpServlet {
-    private iTest repo;
+    private iTestRepo repo;
 
     public void init() throws ServletException {
-        repo = new TestContext(new Connect().getConn());
+        repo = new TestRepo(new Connect().getConn());
     }
 
     @Override
@@ -29,12 +30,12 @@ public class myServlet extends HttpServlet {
         // Check if URL contains id
         if (req.getParameterMap().containsKey("id")) {
             int ID = Integer.parseInt(req.getParameter("id"));
-            names = new Test[]{repo.getName(ID)};
+            names = new Test[]{repo.find(ID)};
         } else if (req.getParameterMap().containsKey("name")) {
             String name = req.getParameter("name");
-            names = new Test[]{repo.getName(name)};
+            names = new Test[]{repo.find(name)};
         } else {
-            names = repo.getAllNames();
+            names = repo.findAll();
         }
 
         // Pass data to jsp page
@@ -49,7 +50,7 @@ public class myServlet extends HttpServlet {
         String msg;
 
         try {
-            repo.addName(new Test(name));
+            repo.add(new Test(name));
             msg = "Successfully added!";
         } catch (Exception e) {
             msg = e.getMessage();

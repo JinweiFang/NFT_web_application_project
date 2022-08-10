@@ -1,19 +1,21 @@
 package Data;
 
+import Data.Repo.iTestRepo;
 import Model.Test;
 
 import java.sql.*;
 import java.util.ArrayList;
 
-public class TestContext implements iTest {
-    private Connection conn;
+public class TestRepo implements iTestRepo {
 
-    public TestContext(Connection _conn) {
-        this.conn = _conn;
+    private final Connection conn;
+
+    public TestRepo(Connection conn) {
+        this.conn = conn;
     }
 
     @Override
-    public Test[] getAllNames() {
+    public Test[] findAll() {
         ArrayList<Test> result = new ArrayList<>();
         String sql = "SELECT ID, name, created_on FROM test";
 
@@ -32,14 +34,19 @@ public class TestContext implements iTest {
         return result.toArray(new Test[0]);
     }
 
-    @Override
-    public Test getName(int ID) {
+    // Created for re-usability
+    private Test find(short type, Object value) {
         Test result = null;
-        String sql = "SELECT ID, name, created_on FROM test WHERE ID = ? ";
+        String sql = (type == 0) ? "SELECT ID, name, created_on FROM test WHERE ID = ? " :
+                "SELECT ID, name, created_on FROM test WHERE name = ? ";
 
         try {
             PreparedStatement pstmt = conn.prepareStatement(sql);
-            pstmt.setInt(1, ID);
+
+            // set variable type depending on the type of the value
+            if(type == 0) pstmt.setInt(1, (Integer) value);
+            else pstmt.setString(1, (String) value);
+
             ResultSet rs = pstmt.executeQuery();
 
             if(rs.next()) {
@@ -54,42 +61,40 @@ public class TestContext implements iTest {
     }
 
     @Override
-    public Test getName(String name) {
-        Test result = null;
-        String sql = "SELECT ID, name, created_on FROM test WHERE name = ? ";
-
-        try {
-            PreparedStatement pstmt = conn.prepareStatement(sql);
-            pstmt.setString(1, name);
-            ResultSet rs = pstmt.executeQuery();
-
-            if(rs.next()) {
-                result = new Test(rs.getInt(1), rs.getString(2), rs.getLong(3));
-            }
-
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-
-        return result;
+    public Test find(Integer ID) {
+        return find((short) 0, ID);
     }
 
     @Override
-    public void addName(Test item) {
+    public Test find(String name) {
+        return find((short) 1, name);
+    }
+
+    @Override
+    public Test add(Test item) {
         String sql = "INSERT INTO test(name, created_on) VALUES(?,?)";
+        boolean success = false;
 
         try {
             PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, item.getName());
             pstmt.setDouble(2, item.getCreatedOn());
             pstmt.executeUpdate();
+            success = true;
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
+
+        return success ? item : null;
     }
 
     @Override
-    public boolean removeName(Test item) {
-        return false;
+    public Test update(Test item) {
+        return null;
+    }
+
+    @Override
+    public Test delete(Integer id) {
+        return null;
     }
 }
