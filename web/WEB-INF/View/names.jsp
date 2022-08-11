@@ -7,7 +7,8 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="Model.Test" %>
-<% Test tests[] = (Test[]) request.getAttribute("data"); %>
+<%@ page import="java.util.List" %>
+<% List<Test> data = (List<Test>) request.getAttribute("data"); %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -48,7 +49,7 @@
 
 <main class="container-fluid">
     <div class="container-sm">
-        <% if (tests != null && tests[0] != null) {%>
+        <% if (data.size() > 0 && data.get(0) != null) { %>
         <table class="table">
             <thead>
             <tr>
@@ -58,17 +59,20 @@
             </tr>
             </thead>
             <tbody>
-            <% for(Test t : tests) { %>
+            <% for (Test t : data) { %>
             <tr>
-                <th scope="row"><%= t.getID() %></th>
-                <td><%= t.getName() %></td>
-                <td><%= Utils.DateUtils.formateDateTime(t.getCreatedOn()) %></td>
+                <th scope="row"><%= t.getID() %>
+                </th>
+                <td><%= t.getName() %>
+                </td>
+                <td><%= Utils.DateUtils.formateDateTime(t.getCreatedOn()) %>
+                </td>
             </tr>
             <% } %>
             </tbody>
         </table>
         <% } else { %>
-        <div class="alert alert-danger" role="alert">
+        <div class="alert alert-danger m-4" role="alert">
             Record(s) not found!
         </div>
         <% } %>

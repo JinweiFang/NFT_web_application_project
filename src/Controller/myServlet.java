@@ -1,41 +1,42 @@
 package Controller;
 
-import java.io.IOException;
-import java.io.PrintWriter;
+import Data.Connect;
+import Data.TestDao;
+import Data.dao.iTestDao;
+import Model.Test;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import Data.*;
-import Data.Repo.*;
-import Model.Test;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
 
 
 // @WebServlet(name = "names", urlPatterns = {"/names"})
 public class myServlet extends HttpServlet {
-    private iTestRepo repo;
+    private iTestDao repo;
 
-    public void init() throws ServletException {
-        repo = new TestRepo(new Connect().getConn());
+    public void init() {
+        repo = new TestDao(new Connect().getConn());
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        Test names[] = null;
+        List<Test> names = new ArrayList<>();
 
         // Check if URL contains id
         if (req.getParameterMap().containsKey("id")) {
-            int ID = Integer.parseInt(req.getParameter("id"));
-            names = new Test[]{repo.find(ID)};
+            int id = Integer.parseInt(req.getParameter("id"));
+            names.add(repo.find(id));
         } else if (req.getParameterMap().containsKey("name")) {
             String name = req.getParameter("name");
-            names = new Test[]{repo.find(name)};
+            names.add(repo.find(name));
         } else {
-            names = repo.findAll();
+            names.addAll(repo.findAll());
         }
 
         // Pass data to jsp page
@@ -45,12 +46,12 @@ public class myServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String name = req.getParameter("name");
         String msg;
 
         try {
-            repo.add(new Test(name));
+            repo.save(new Test(name));
             msg = "Successfully added!";
         } catch (Exception e) {
             msg = e.getMessage();

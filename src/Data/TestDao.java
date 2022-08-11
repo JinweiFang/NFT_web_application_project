@@ -1,42 +1,44 @@
 package Data;
 
-import Data.Repo.iTestRepo;
+import Data.dao.iTestDao;
 import Model.Test;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
-public class TestRepo implements iTestRepo {
+public class TestDao implements iTestDao {
 
     private final Connection conn;
 
-    public TestRepo(Connection conn) {
+    public TestDao(Connection conn) {
         this.conn = conn;
     }
 
     @Override
-    public Test[] findAll() {
-        ArrayList<Test> result = new ArrayList<>();
-        String sql = "SELECT ID, name, created_on FROM test";
+    public Collection<Test> findAll() {
+        List<Test> results = new ArrayList<>();
+        String sql = "SELECT id, name, created_on FROM test";
 
         try {
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(sql);
 
-            while (rs.next()) {
-                result.add(new Test(rs.getInt(1), rs.getString(2), rs.getLong(3)));
-            }
+            while (rs.next())
+                results.add(new Test(rs.getInt(1), rs.getString(2), rs.getLong(3)));
 
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
 
-        return result.toArray(new Test[0]);
+        return results;
     }
 
     /**
      * Created for re-usability
-     * @param type 0 for id, 1 for name
+     *
+     * @param type  0 for id, 1 for name
      * @param value the value of the type
      * @return return the record if found
      */
@@ -49,12 +51,12 @@ public class TestRepo implements iTestRepo {
             PreparedStatement pstmt = conn.prepareStatement(sql);
 
             // set variable type depending on the type of the value
-            if(type == 0) pstmt.setInt(1, (Integer) value);
+            if (type == 0) pstmt.setInt(1, (Integer) value);
             else pstmt.setString(1, (String) value);
 
             ResultSet rs = pstmt.executeQuery();
 
-            if(rs.next()) {
+            if (rs.next()) {
                 result = new Test(rs.getInt(1), rs.getString(2), rs.getLong(3));
             }
 
@@ -66,8 +68,8 @@ public class TestRepo implements iTestRepo {
     }
 
     @Override
-    public Test find(Integer ID) {
-        return find((short) 0, ID);
+    public Test find(Integer id) {
+        return find((short) 0, id);
     }
 
     @Override
@@ -76,7 +78,7 @@ public class TestRepo implements iTestRepo {
     }
 
     @Override
-    public Test add(Test item) {
+    public Test save(Test item) {
         String sql = "INSERT INTO test(name, created_on) VALUES(?,?)";
         boolean success = false;
 
@@ -102,4 +104,5 @@ public class TestRepo implements iTestRepo {
     public Test delete(Integer id) {
         return null;
     }
+
 }
