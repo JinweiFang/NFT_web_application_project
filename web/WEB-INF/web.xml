@@ -8,11 +8,11 @@
     </welcome-file-list>
 
     <servlet>
-        <servlet-name>myServlet</servlet-name>
-        <servlet-class>Controller.myServlet</servlet-class>
+        <servlet-name>testServlet</servlet-name>
+        <servlet-class>Controller.testServlet</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>myServlet</servlet-name>
+        <servlet-name>testServlet</servlet-name>
         <url-pattern>/names</url-pattern>
     </servlet-mapping>
 </web-app>

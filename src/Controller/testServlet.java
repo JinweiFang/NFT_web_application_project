@@ -17,7 +17,7 @@ import java.util.List;
 
 
 // @WebServlet(name = "names", urlPatterns = {"/names"})
-public class myServlet extends HttpServlet {
+public class testServlet extends HttpServlet {
     private iTestDao repo;
 
     public void init() {
