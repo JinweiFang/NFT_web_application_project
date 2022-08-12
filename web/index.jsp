@@ -36,9 +36,7 @@
                 <li><a href="#" class="nav-link px-2 text-white">About</a></li>
             </ul>
 
-            <form action="/names" method="get" class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3">
-                <input type="search" name="name" class="form-control form-control-dark" placeholder="Search names..." aria-label="Search">
-            </form>
+
 
             <div class="text-end">
                 <button type="button" class="btn btn-outline-light me-2">Login</button>
@@ -47,17 +45,12 @@
         </div>
     </nav>
 </header>
-<%--<form action="" method="">--%>
-<%--    <input type="text" name="name" placeholder="enter a name" required>--%>
-<%--    <button formaction="/names" formmethod="post">add</button>--%>
-<%--    <button formaction="/names" formmethod="get">search</button>--%>
-<%--</form>--%>
 <main class="container-fluid">
     <div class="container-sm">
         <form action="/names" method="post" class="">
             <div class="input-group">
-                <input type="text" class="form-control" placeholder="enter a name" aria-label="name" aria-describedby="button-addon2">
-                <button formaction="/names" formmethod="post" class="btn btn-light btn-outline-secondary" type="button" id="button-addon2">Add</button>
+                <input type="text" name="name" class="form-control" placeholder="enter a name" required>
+                <button formaction="/names" formmethod="post" class="btn btn-light btn-outline-secondary">Add</button>
             </div>
         </form>
     </div>
