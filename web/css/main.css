@@ -16,3 +16,7 @@ main {
 form.login {
     max-width: 400px;
 }
+
+form.login > div {
+    margin: 10px 0;
+}
