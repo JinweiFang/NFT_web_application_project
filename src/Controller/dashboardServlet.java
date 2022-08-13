@@ -26,15 +26,19 @@ public class dashboardServlet extends HttpServlet {
         }
 
         // Handle logout
-        if(req.getParameterMap().containsKey("logout") && req.getParameter("logout").equals("1"))
-            this.logout();
+        if(req.getParameterMap().containsKey("logout") && req.getParameter("logout").equals("1")) {
+            logout(req);
+            resp.sendRedirect(req.getContextPath() + "/");
+            return;
+        }
 
         // Pass the request onto jsp page
         RequestDispatcher dispatcher = req.getRequestDispatcher("/WEB-INF/View/dashboard.jsp");
         dispatcher.forward(req, resp);
     }
 
-    private void logout() {
-        System.out.println("logging out!");
+    private void logout(HttpServletRequest req) {
+        HttpSession session = req.getSession(false);
+        session.invalidate();
     }
 }
