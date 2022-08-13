@@ -68,8 +68,8 @@ public class TestDao implements iTestDao {
     }
 
     @Override
-    public Test find(Integer id) {
-        return find((short) 0, id);
+    public Test find(Test item) {
+        return find((short) 0, item.getID());
     }
 
     @Override
@@ -101,7 +101,7 @@ public class TestDao implements iTestDao {
     }
 
     @Override
-    public Test delete(Integer id) {
+    public Test delete(Test item) {
         return null;
     }
 

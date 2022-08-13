@@ -4,14 +4,14 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 
 
-public class Connect {
+public class dataSource {
     private final Connection conn;
 
-    public Connect() {
+    public dataSource() {
         this.conn = SQLiteDB(); // default
     }
 
-    public Connect(String dbname) {
+    public dataSource(String dbname) {
         switch (dbname.toLowerCase()) {
             case "postgres" -> this.conn = PostgresDB();
             default -> this.conn = SQLiteDB();

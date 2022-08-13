@@ -1,6 +1,6 @@
 package Controller;
 
-import Data.Connect;
+import Data.dataSource;
 import Data.TestDao;
 import Data.dao.iTestDao;
 import Model.Test;
@@ -21,7 +21,7 @@ public class testServlet extends HttpServlet {
     private iTestDao repo;
 
     public void init() {
-        repo = new TestDao(new Connect().getConn());
+        repo = new TestDao(new dataSource().getConn());
     }
 
     @Override
@@ -31,7 +31,7 @@ public class testServlet extends HttpServlet {
         // Check if URL contains id
         if (req.getParameterMap().containsKey("id")) {
             int id = Integer.parseInt(req.getParameter("id"));
-            names.add(repo.find(id));
+            names.add(repo.find(new Test(id, "")));
         } else if (req.getParameterMap().containsKey("name")) {
             String name = req.getParameter("name");
             names.add(repo.find(name));
