@@ -3,14 +3,26 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
          version="4.0">
+    <welcome-file-list>
+        <welcome-file>index.jsp</welcome-file>
+    </welcome-file-list>
+
 
     <servlet>
-        <servlet-name>ServletTest</servlet-name>
-        <servlet-class>ServletTest</servlet-class>
+        <servlet-name>authenticateServlet</servlet-name>
+        <servlet-class>Controller.authenticateServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>dashboardServlet</servlet-name>
+        <servlet-class>Controller.dashboardServlet</servlet-class>
     </servlet>
 
     <servlet-mapping>
-        <servlet-name>ServletTest</servlet-name>
-        <url-pattern>/HelloWorld</url-pattern>
+        <servlet-name>authenticateServlet</servlet-name>
+        <url-pattern>/authenticate</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>dashboardServlet</servlet-name>
+        <url-pattern>/dashboard</url-pattern>
     </servlet-mapping>
 </web-app>

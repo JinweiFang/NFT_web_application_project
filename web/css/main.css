@@ -1,0 +1,23 @@
+body {
+    font-family: sans-serif;
+}
+
+main {
+    padding: 35px 15px 15px;
+}
+
+form.login {
+    max-width: 450px;
+    padding: 15px 25px;
+    border-radius: 5px;
+    border: 1px solid #dcdcdc;
+    box-shadow: 0px 0px 20px -10px #5a5a5a;
+}
+
+form.login legend {
+    font-weight: bold;
+}
+
+form.login .form-row {
+    margin: 10px 0;
+}

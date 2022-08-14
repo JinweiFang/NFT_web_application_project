@@ -6,13 +6,12 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<html>
-  <head>
-    <title>my first web app</title>
-  </head>
-  <body>
-            Hey guys,
-            <br>
-            I made it! (Testing)
-  </body>
-</html>
+<%@ include file="WEB-INF/Templates/Header.jsp" %>
+
+<main class="container-fluid">
+    <div class="container-sm">
+        <h1 style="text-align: center;">Welcome to NFT!</h1>
+    </div>
+</main>
+
+<%@ include file="WEB-INF/Templates/Footer.jsp" %>
