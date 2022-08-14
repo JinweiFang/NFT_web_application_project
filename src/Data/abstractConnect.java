@@ -1,13 +1,11 @@
 package Data;
 
-import Data.dao.iDao;
-
 import java.sql.Connection;
 
-public abstract class AbstractConnect {
+public abstract class abstractConnect {
     protected final Connection conn;
 
-    protected AbstractConnect(Connection conn) {
+    protected abstractConnect(Connection conn) {
         this.conn = conn;
     }
 

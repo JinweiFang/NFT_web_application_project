@@ -1,15 +1,16 @@
-package Model;
+package Domain;
 
 public class User {
     private int id;
-    private String fName, lName, username, password;
+    private String fName, lName, email, username, password;
 
     public User(){}
 
-    public User(int id, String fName, String lName, String username, String password) {
+    public User(int id, String fName, String lName, String email, String username, String password) {
         this.id = id;
         this.fName = fName;
         this.lName = lName;
+        this.email = email;
         this.username = username;
         this.password = password;
     }
@@ -36,6 +37,14 @@ public class User {
 
     public void setlName(String lName) {
         this.lName = lName;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getUsername() {

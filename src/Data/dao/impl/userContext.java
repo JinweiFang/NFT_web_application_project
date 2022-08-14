@@ -1,7 +1,8 @@
-package Data;
+package Data.dao.impl;
 
+import Data.abstractConnect;
 import Data.dao.userDao;
-import Model.User;
+import Domain.User;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -9,7 +10,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Collection;
 
-public class userContext extends AbstractConnect implements userDao {
+public class userContext extends abstractConnect implements userDao {
 
     public userContext(Connection conn) {
         super(conn);
@@ -22,7 +23,7 @@ public class userContext extends AbstractConnect implements userDao {
 
     @Override
     public User find(User item) {
-        String sql = "SELECT id, fname, lname, username, password FROM users WHERE username = ? AND password = ? ";
+        String sql = "SELECT id, fname, lname, email, username, password FROM users WHERE username = ? AND password = ? ";
         User result = null;
 
         try {
@@ -31,8 +32,16 @@ public class userContext extends AbstractConnect implements userDao {
             pstm.setString(2, item.getPassword());
             ResultSet res = pstm.executeQuery();
 
-            if (res.next()) result = new User(res.getInt(1), res.getString(2), res.getString(3), res.getString(4), res.getString(5));
-
+            if (res.next()) {
+                User usr = new User();
+                usr.setId(res.getInt(1));
+                usr.setfName(res.getString(2));
+                usr.setlName(res.getString(3));
+                usr.setEmail(res.getString(4));
+                usr.setUsername(res.getString(5));
+                usr.setPassword(res.getString(6));
+                result = usr;
+            }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }

@@ -7,13 +7,10 @@
         <welcome-file>index.jsp</welcome-file>
     </welcome-file-list>
 
+
     <servlet>
-        <servlet-name>testServlet</servlet-name>
-        <servlet-class>Controller.testServlet</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>loginServlet</servlet-name>
-        <servlet-class>Controller.loginServlet</servlet-class>
+        <servlet-name>authenticateServlet</servlet-name>
+        <servlet-class>Controller.authenticateServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>dashboardServlet</servlet-name>
@@ -21,12 +18,8 @@
     </servlet>
 
     <servlet-mapping>
-        <servlet-name>testServlet</servlet-name>
-        <url-pattern>/names</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>loginServlet</servlet-name>
-        <url-pattern>/login</url-pattern>
+        <servlet-name>authenticateServlet</servlet-name>
+        <url-pattern>/authenticate</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>dashboardServlet</servlet-name>

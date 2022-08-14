@@ -10,7 +10,7 @@
 
 <main class="container-fluid">
     <div class="container-sm login-container d-flex flex-row justify-content-center">
-        <form action="/login" method="post" class="login flex-fill">
+        <form action="/authenticate" method="post" class="login flex-fill">
             <fieldset>
                 <legend class="py-2">Login</legend>
                 <% if (request.getParameterMap().containsKey("errmsg") && request.getParameter("errmsg").equals("1")) { %>

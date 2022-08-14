@@ -1,5 +1,5 @@
 package Data.dao;
 
-import Model.User;
+import Domain.User;
 
-public interface userDao extends iDao<User> { }
+public interface userDao extends AbstractDao<User> { }

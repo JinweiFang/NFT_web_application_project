@@ -1,4 +1,4 @@
-<%@ page import="Model.User" %><%--
+<%@ page import="Domain.User" %><%--
   Created by IntelliJ IDEA.
   User: johnpiapian
   Date: 8/12/22

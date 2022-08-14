@@ -2,7 +2,7 @@ package Data.dao;
 
 import java.util.Collection;
 
-public interface iDao<T> {
+public interface AbstractDao<T> {
     Collection<T> findAll();
     T find(T item);
     T save(T item);
