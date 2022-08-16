@@ -3,6 +3,7 @@ package Controller;
 import Domain.User;
 import Service.UserService;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -20,17 +21,42 @@ public class authenticateServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        User response = userService.authenticateUser(req.getParameter("username"), req.getParameter("password"));
+        // Make the url contains subfolder -> [currentServlet]/someurl
+        if(req.getPathInfo() != null && req.getPathInfo().length() > 1) {
 
-        // Redirect back to login page if validation failed
-        if (response == null) {
-            resp.sendRedirect(req.getContextPath() + "/login.jsp?errmsg=1");
-            return;
+            // Remove the first character and then split the url /hello/world -> [hello, world]
+            String urls[] = req.getPathInfo().substring(1).split("/");
+
+            if (urls[0].equals("login")) {
+                User response = userService.authenticateUser(req.getParameter("username"), req.getParameter("password"));
+
+                // Redirect back to login page if validation failed
+                if (response == null) {
+                    resp.sendRedirect(req.getContextPath() + "/account/login.jsp?errmsg=1");
+                    return;
+                }
+
+                // Set up session and redirect to dashboard
+                HttpSession session = req.getSession(true);
+                session.setAttribute("user", response);
+                resp.sendRedirect(req.getContextPath() + "/dashboard");
+            } else if(urls[0].equals("reset")) {
+                System.out.println("Reset password!");
+            }
+
         }
 
-        // Set up session and redirect to dashboard
-        HttpSession session = req.getSession(true);
-        session.setAttribute("user", response);
-        resp.sendRedirect(req.getContextPath() + "/dashboard");
+        // Code for when the url is just [currentServlet]
+        // ....
+    }
+
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        // Handle logout
+        if(req.getParameterMap().containsKey("logout") && req.getParameter("logout").equals("1")) {
+            HttpSession session = req.getSession(false);
+            session.invalidate();
+            resp.sendRedirect(req.getContextPath() + "/");
+        }
     }
 }

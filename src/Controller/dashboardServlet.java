@@ -21,14 +21,7 @@ public class dashboardServlet extends HttpServlet {
         // Handle unauthorized access
         HttpSession session = req.getSession(false);
         if(session == null || session.getAttribute("user") == null) {
-            resp.sendRedirect(req.getContextPath() + "/login.jsp");
-            return;
-        }
-
-        // Handle logout
-        if(req.getParameterMap().containsKey("logout") && req.getParameter("logout").equals("1")) {
-            logout(req);
-            resp.sendRedirect(req.getContextPath() + "/");
+            resp.sendRedirect(req.getContextPath() + "/account/login.jsp");
             return;
         }
 
@@ -37,8 +30,4 @@ public class dashboardServlet extends HttpServlet {
         dispatcher.forward(req, resp);
     }
 
-    private void logout(HttpServletRequest req) {
-        HttpSession session = req.getSession(false);
-        session.invalidate();
-    }
 }

@@ -19,10 +19,10 @@
 
     <servlet-mapping>
         <servlet-name>authenticateServlet</servlet-name>
-        <url-pattern>/authenticate</url-pattern>
+        <url-pattern>/authenticate/*</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>dashboardServlet</servlet-name>
-        <url-pattern>/dashboard</url-pattern>
+        <url-pattern>/dashboard/*</url-pattern>
     </servlet-mapping>
 </web-app>
