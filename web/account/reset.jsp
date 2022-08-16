@@ -15,7 +15,13 @@
                 <legend class="py-2">Reset Password</legend>
                 <% if (request.getParameterMap().containsKey("errmsg") && request.getParameter("errmsg").equals("1")) { %>
                 <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    An error occurred during authentication!
+                    An unexpected error occurred!
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                <% } %>
+                <% if (request.getParameterMap().containsKey("succmsg") && request.getParameter("succmsg").equals("1")) { %>
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    We've emailed you password reset link!
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
                 <% } %>

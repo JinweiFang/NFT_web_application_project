@@ -45,7 +45,7 @@ public class dataSource {
         String user = "postgres";
 
         try {
-            // Need it for recognizing SQLite dependency
+            // Need it for recognizing Postgresql dependency
             Class.forName("org.postgresql.Driver");
 
             conn = DriverManager.getConnection(url, user, System.getenv("postgresql_pass"));
