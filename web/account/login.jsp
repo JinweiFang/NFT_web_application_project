@@ -6,16 +6,16 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ include file="WEB-INF/Templates/Header.jsp" %>
+<%@ include file="../WEB-INF/Templates/Header.jsp" %>
 
 <main class="container-fluid">
     <div class="container-sm login-container d-flex flex-row justify-content-center">
-        <form action="/authenticate" method="post" class="login flex-fill">
+        <form action="/authenticate/login" method="post" class="login flex-fill">
             <fieldset>
                 <legend class="py-2">Login</legend>
                 <% if (request.getParameterMap().containsKey("errmsg") && request.getParameter("errmsg").equals("1")) { %>
                 <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    An error occurred during authentication!
+                    An unexpected error occurred!
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
                 <% } %>
@@ -25,7 +25,7 @@
                            required>
                 </div>
                 <div class="form-row form-group">
-                    <label for="inputPassword">Password</label>
+                    <label for="inputPassword">Password Password</label>
                     <input type="password" name="password" class="form-control" id="inputPassword"
                            placeholder="Password"
                            required>
@@ -33,6 +33,7 @@
                 <div class="form-row form-check">
                     <input type="checkbox" class="form-check-input" id="rememberMe">
                     <label class="form-check-label" for="rememberMe">Remember Me</label>
+                    <a href="./reset.jsp" class="px-2">Forgot password?</a>
                 </div>
                 <div class="form-row">
                     <button type="submit" class="btn btn-primary">Submit</button>
@@ -42,4 +43,4 @@
     </div>
 </main>
 
-<%@ include file="WEB-INF/Templates/Footer.jsp" %>
+<%@ include file="../WEB-INF/Templates/Footer.jsp" %>
