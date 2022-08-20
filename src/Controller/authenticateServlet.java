@@ -1,8 +1,10 @@
 package Controller;
 
+import Domain.Token;
 import Domain.User;
 import Service.UserService;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -21,12 +23,13 @@ public class authenticateServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        // Make the url contains subfolder -> [currentServlet]/someurl
-        if(req.getPathInfo() != null && req.getPathInfo().length() > 1) {
+        // Handle url routing -> [currentServlet]/someurl
+        if (req.getPathInfo() != null && req.getPathInfo().length() > 1) {
 
             // Remove the first character and then split the url /hello/world -> [hello, world]
             String urls[] = req.getPathInfo().substring(1).split("/");
 
+            // Handle login
             if (urls[0].equals("login")) {
                 User response = userService.authenticateUser(req.getParameter("username"), req.getParameter("password"));
 
@@ -40,23 +43,63 @@ public class authenticateServlet extends HttpServlet {
                 HttpSession session = req.getSession(true);
                 session.setAttribute("user", response);
                 resp.sendRedirect(req.getContextPath() + "/dashboard");
-            } else if(urls[0].equals("reset")) {
-                System.out.println("Reset password!");
             }
+            // Handle reset
+            else if (urls[0].equals("reset")) {
+                User usrResponse = userService.findUserByUsername(req.getParameter("username"));
 
+                // Redirect back to login page if validation failed
+                if (usrResponse == null) {
+                    resp.sendRedirect(req.getContextPath() + "/account/reset.jsp?errmsg=1");
+                    return;
+                }
+
+                // Show a success message
+                if (usrResponse != null) {
+                    Token tknResponse = userService.createPasswordResetTokenForUser(req.getParameter("username"));
+
+                    if (tknResponse != null){
+                        resp.sendRedirect(req.getContextPath() + "/account/reset.jsp?succmsg=1");
+                        System.out.println("http://localhost:8080/authenticate/new-password?uname="+tknResponse.getUsername()+"&token="+tknResponse.getTokenValue());
+                    }
+
+                }
+            }
+            // Handle new password set up
+            else if (urls[0].equals("new-password")) {
+                boolean isValid = userService.varifyPasswordResetToken(req.getParameter("uname"), req.getParameter("token"));
+                if (isValid) {
+                    if(userService.updateUserPassword(req.getParameter("uname"), req.getParameter("password")))
+                        resp.sendRedirect(req.getContextPath() + "/account/login.jsp?succresttpwd=1");
+                }
+            }
         }
 
-        // Code for when the url is just [currentServlet]
-        // ....
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         // Handle logout
-        if(req.getParameterMap().containsKey("logout") && req.getParameter("logout").equals("1")) {
+        if (req.getParameterMap().containsKey("logout") && req.getParameter("logout").equals("1")) {
             HttpSession session = req.getSession(false);
             session.invalidate();
             resp.sendRedirect(req.getContextPath() + "/");
+        }
+
+        // Handle url routing -> [currentServlet]/someurl
+        if (req.getPathInfo() != null && req.getPathInfo().length() > 1) {
+
+            // Remove the first character and then split the url /hello/world -> [hello, world]
+            String urls[] = req.getPathInfo().substring(1).split("/");
+
+            // Handle new password setup
+            if (urls[0].equals("new-password") &&
+                    req.getParameterMap().containsKey("uname") &&
+                    req.getParameterMap().containsKey("token")) {
+                // Pass the request onto jsp page
+                RequestDispatcher dispatcher = req.getRequestDispatcher("/WEB-INF/View/account/new-password.jsp");
+                dispatcher.forward(req, resp);
+            }
         }
     }
 }

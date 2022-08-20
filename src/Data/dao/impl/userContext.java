@@ -50,6 +50,30 @@ public class userContext extends abstractConnect implements userDao {
     }
 
     @Override
+    public User findByUsername(User item) {
+        String sql = "SELECT id, email, username FROM users WHERE username = ?";
+        User result = null;
+
+        try {
+            PreparedStatement pstm = conn.prepareStatement(sql);
+            pstm.setString(1, item.getUsername());
+            ResultSet res = pstm.executeQuery();
+
+            if (res.next()) {
+                User usr = new User();
+                usr.setId(res.getInt(1));
+                usr.setEmail(res.getString(2));
+                usr.setUsername(res.getString(3));
+                result = usr;
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        return result;
+    }
+
+    @Override
     public User save(User item) {
         return null;
     }
@@ -57,6 +81,33 @@ public class userContext extends abstractConnect implements userDao {
     @Override
     public User update(User item) {
         return null;
+    }
+
+    @Override
+    public User updateByUsername(User item) {
+        String sql = "UPDATE users SET password = ? WHERE username = ?";
+        boolean success = false;
+
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, item.getPassword());
+            pstmt.setString(2, item.getUsername());
+
+            if (pstmt.executeUpdate() == 0) throw new SQLException("Update failed! no rows affected.");
+
+            try (ResultSet generatedKeys = pstmt.getGeneratedKeys()) {
+                if (generatedKeys.next())
+                    item.setId(generatedKeys.getInt(1));
+                else
+                    throw new SQLException("Update failed! no rows affected.");
+            }
+
+            success = true;
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        return success ? item : null;
     }
 
     @Override
