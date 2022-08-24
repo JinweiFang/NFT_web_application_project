@@ -23,7 +23,7 @@ public class userContext extends abstractConnect implements userDao {
 
     @Override
     public User find(User item) {
-        String sql = "SELECT id, fname, lname, email, username, password FROM users WHERE username = ? AND password = ? ";
+        String sql = "SELECT id, fname, lname, email, username, password, balance, isAdmin FROM users WHERE username = ? AND password = ? ";
         User result = null;
 
         try {
@@ -40,6 +40,8 @@ public class userContext extends abstractConnect implements userDao {
                 usr.setEmail(res.getString(4));
                 usr.setUsername(res.getString(5));
                 usr.setPassword(res.getString(6));
+                usr.setBalance(res.getDouble(7));
+                usr.setIsAdmin(res.getInt(8));
                 result = usr;
             }
         } catch (SQLException e) {

@@ -1,18 +1,25 @@
 package Domain;
 
 public class User {
-    private int id;
+    private int id, isAdmin;
     private String fName, lName, email, username, password;
+    private double balance;
 
     public User(){}
 
-    public User(int id, String fName, String lName, String email, String username, String password) {
+    public User(int id, String fName, String lName, String email, String username, String password, double balance, int isAdmin) {
         this.id = id;
         this.fName = fName;
         this.lName = lName;
         this.email = email;
         this.username = username;
         this.password = password;
+        this.balance = balance;
+        this.isAdmin = isAdmin;
+    }
+
+    public User(int id, String fName, String lName, String email, String username, String password) {
+        this(id, fName, lName, email, username, password, 0, 0);
     }
 
     public int getId() {
@@ -61,5 +68,21 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public int getIsAdmin() {
+        return isAdmin;
+    }
+
+    public void setIsAdmin(int isAdmin) {
+        this.isAdmin = isAdmin;
+    }
+
+    public double getBalance() {
+        return balance;
+    }
+
+    public void setBalance(double balance) {
+        this.balance = balance;
     }
 }

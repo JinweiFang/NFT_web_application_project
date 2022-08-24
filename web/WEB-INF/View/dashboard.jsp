@@ -8,8 +8,11 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ include file="../Templates/Header.jsp" %>
 <main class="container-fluid">
-  <div class="container-sm login-container d-flex flex-row">
-    <h3>Welcome, <%= currentUser.getfName()%>!</h3>
-  </div>
+    <div class="container-sm">
+        <h3>Welcome, <%= currentUser.getfName()%>!</h3>
+        <% if (currentUser.getIsAdmin() == 1) {%>
+        <h5>I am admin!</h5>
+        <% } %>
+    </div>
 </main>
 <%@ include file="../Templates/Footer.jsp" %>
