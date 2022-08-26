@@ -11,7 +11,7 @@
     <div class="container-sm">
         <h3>Welcome, <%= currentUser.getfName()%>!</h3>
         <% if (currentUser.getIsAdmin() == 1) {%>
-        <h5>I am admin!</h5>
+        <h5>I am an admin!</h5>
         <% } %>
     </div>
 </main>

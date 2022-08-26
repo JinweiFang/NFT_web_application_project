@@ -30,8 +30,18 @@
             </ul>
             <%-- If logged in then only show logout button --%>
             <% if (currentUser != null && currentUser.getId() > 0) {%>
-            <div class="text-end">
-                <a href="${pageContext.request.contextPath}/authenticate?logout=1" class="btn btn-outline-light me-2">Logout</a>
+            <div class="flex-shrink-0 dropdown">
+                <a href="#" class="d-block link-light text-decoration-none dropdown-toggle" id="dropdownUser2" data-bs-toggle="dropdown" aria-expanded="false">
+<%--                    <img src="https://johnpiapian.github.io/imgs/me.jpg" alt="mdo" width="32" height="32" class="rounded-circle">--%>
+                    <span><%=currentUser.getfName()%></span>
+                </a>
+                <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser2" style="">
+                    <li><a class="dropdown-item" href="${pageContext.request.contextPath}/dashboard">Dashboard</a></li>
+                    <li><a class="dropdown-item" href="#">Profile</a></li>
+                    <li><a class="dropdown-item" href="#">Settings</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="${pageContext.request.contextPath}/authenticate?logout=1">Log Out</a></li>
+                </ul>
             </div>
             <% } else { %>
             <div class="text-end">
