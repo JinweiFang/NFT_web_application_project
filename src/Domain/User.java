@@ -85,4 +85,8 @@ public class User {
     public void setBalance(double balance) {
         this.balance = balance;
     }
+
+    public boolean isAdmin(){
+        return getIsAdmin() == 1;
+    }
 }

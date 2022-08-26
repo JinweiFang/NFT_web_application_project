@@ -37,6 +37,9 @@
                 </a>
                 <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser2" style="">
                     <li><a class="dropdown-item" href="${pageContext.request.contextPath}/dashboard">Dashboard</a></li>
+                    <% if (currentUser.getIsAdmin() == 1) {%>
+                    <li><a class="dropdown-item" href="${pageContext.request.contextPath}/dashboard/account-list">Account List</a></li>
+                    <% } %>
                     <li><a class="dropdown-item" href="#">Profile</a></li>
                     <li><a class="dropdown-item" href="#">Settings</a></li>
                     <li><hr class="dropdown-divider"></li>
