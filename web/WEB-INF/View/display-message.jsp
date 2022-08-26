@@ -10,7 +10,7 @@
 <main class="container-fluid">
     <div class="container-sm">
         <% if (request.getParameterMap().containsKey("msg") && !request.getParameter("msg").isBlank()) { %>
-        <p class="text-center"><%= request.getParameter("msg")%></p>
+        <h5 class="text-center"><%= request.getParameter("msg")%></h5>
         <% } %>
     </div>
 </main>
