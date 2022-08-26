@@ -1,8 +1,8 @@
 <%--
   Created by IntelliJ IDEA.
   User: johnpiapian
-  Date: 8/12/22
-  Time: 9:10 PM
+  Date: 8/25/22
+  Time: 10:10 PM
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
@@ -26,7 +26,7 @@
                 <th scope="row">1</th>
                 <td>Sut</td>
                 <td>Tuang</td>
-                <td>@suttuang</td>
+                <td>suttuang</td>
                 <td>suttuang@uwm.edu</td>
                 <td>$1000</td>
                 <td>Yes</td>

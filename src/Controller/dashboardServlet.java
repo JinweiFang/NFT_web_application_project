@@ -1,6 +1,7 @@
 package Controller;
 
 import Domain.User;
+import Service.UserService;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -9,12 +10,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.List;
 
 public class dashboardServlet extends HttpServlet {
 
+    private UserService userService;
+
     @Override
-    public void init() throws ServletException {
-        // initialize
+    public void init() {
+        this.userService = new UserService();
     }
 
     @Override
@@ -30,17 +34,22 @@ public class dashboardServlet extends HttpServlet {
 
         User loggedUser = (User) session.getAttribute("user");
 
-        // Handle url routing for sub folders
-        // Only admin should be able to access
+        // Handle url routing
+        // Only admin should be able to access the following block
         if (req.getPathInfo() != null && req.getPathInfo().length() > 1) {
-            // Remove the first character and then split the url dashboard/hello/world/ -> [hello, world, ]
+            // Remove the first character and then split the url /dashboard/hello/world/ -> [hello, world, ]
             String urls[] = req.getPathInfo().substring(1).split("/");
 
             String msg = "Sorry, admin account is needed to access this page!";
             if(!loggedUser.isAdmin()) dispatchToJSP(req, resp, "/WEB-INF/View/display-message.jsp?msg=" + msg);
 
-            if(urls[0].equals("account-list"))
+            // Route -> /dashboard/account-list
+            if(urls[0].equals("account-list")) {
+                List<User> users = userService.getAllUsers();
+
+                req.setAttribute("users", users);
                 dispatchToJSP(req, resp, "/WEB-INF/View/account/account-list.jsp");
+            }
         }
 
         // Pass the request onto jsp page

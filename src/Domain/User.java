@@ -89,4 +89,5 @@ public class User {
     public boolean isAdmin(){
         return getIsAdmin() == 1;
     }
+
 }

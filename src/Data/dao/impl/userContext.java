@@ -8,7 +8,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 public class userContext extends abstractConnect implements userDao {
 
@@ -18,7 +20,29 @@ public class userContext extends abstractConnect implements userDao {
 
     @Override
     public Collection<User> findAll() {
-        return null;
+        String sql = "SELECT id, fname, lname, email, username, balance, isAdmin FROM users";
+        List<User> result = new ArrayList<>();
+
+        try {
+            PreparedStatement pstm = conn.prepareStatement(sql);
+            ResultSet res = pstm.executeQuery();
+
+            while (res.next()) {
+                User usr = new User();
+                usr.setId(res.getInt(1));
+                usr.setfName(res.getString(2));
+                usr.setlName(res.getString(3));
+                usr.setEmail(res.getString(4));
+                usr.setUsername(res.getString(5));
+                usr.setBalance(res.getDouble(6));
+                usr.setIsAdmin(res.getInt(7));
+                result.add(usr);
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        return result;
     }
 
     @Override
