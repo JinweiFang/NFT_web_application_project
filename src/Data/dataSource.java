@@ -1,11 +1,14 @@
 package Data;
 
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
 import java.sql.DriverManager;
 
 
 public class dataSource {
     private final Connection conn;
+    private final String SQLITE_URL = getSqlitePath();
 
     public dataSource() {
         this.conn = SQLiteDB(); // default
@@ -21,14 +24,12 @@ public class dataSource {
     private Connection SQLiteDB() {
         Connection conn = null;
 
-        // Connection Info
-        String url = "jdbc:sqlite:/Users/johnpiapian/code/other/NFT_web_project/src/database";
-
         try {
             // Need it for recognizing SQLite dependency
             Class.forName("org.sqlite.JDBC");
 
-            conn = DriverManager.getConnection(url);
+            conn = DriverManager.getConnection(SQLITE_URL);
+
             System.out.println("Connected to the SQLite database successfully.");
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
@@ -54,7 +55,22 @@ public class dataSource {
             System.out.println(e.getMessage());
         }
 
-        return  conn;
+        return conn;
+    }
+
+    /**
+     * Returns a valid path to the Sqlite database file in the project.
+     */
+    private String getSqlitePath() {
+        URL resource = getClass().getResource("/");
+        String absPath = resource.getPath().replace("/out/artifacts/test_war_exploded/WEB-INF/classes/", "/src/database").replaceAll("%20", " ");
+        absPath = java.net.URLDecoder.decode(absPath, StandardCharsets.UTF_8);
+
+        StringBuilder path = new StringBuilder();
+        path.append("jdbc:sqlite:");
+        path.append(absPath);
+
+        return path.toString();
     }
 
     public Connection getConn() {
