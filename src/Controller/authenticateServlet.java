@@ -36,14 +36,6 @@ public class authenticateServlet extends HttpServlet {
             // Remove the first character and then split the url /hello/world -> [hello, world]
             String urls[] = req.getPathInfo().substring(1).split("/");
 
-            // Handle new password setup
-            if (urls[0].equals("new-password") &&
-                    req.getParameterMap().containsKey("uname") &&
-                    req.getParameterMap().containsKey("token")) {
-                // Pass the request onto jsp page
-                RequestDispatcher dispatcher = req.getRequestDispatcher("/WEB-INF/View/account/new-password.jsp");
-                dispatcher.forward(req, resp);
-            }
         }
     }
 
@@ -67,6 +59,7 @@ public class authenticateServlet extends HttpServlet {
     }
 
 
+    // HELPER METHODS
     private void handleLogin(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         User response = userService.authenticateUser(req.getParameter("username"), req.getParameter("password"));
 
@@ -98,18 +91,22 @@ public class authenticateServlet extends HttpServlet {
 
             if (tknResponse != null){
                 resp.sendRedirect(req.getContextPath() + "/account/reset.jsp?succmsg=1");
-                System.out.println("http://localhost:8080/authenticate/new-password?uname="+tknResponse.getUsername()+"&token="+tknResponse.getTokenValue());
+                System.out.println("http://localhost:8080/account/new-password.jsp?uname="+tknResponse.getUsername()+"&token="+tknResponse.getTokenValue());
             }
-
         }
     }
 
     private void handleNewPassword(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        boolean isValid = userService.verifyPasswordResetToken(req.getParameter("uname"), req.getParameter("token"));
-        if (isValid) {
-            if(userService.updateUserPassword(req.getParameter("uname"), req.getParameter("password")))
-                resp.sendRedirect(req.getContextPath() + "/account/login.jsp?succresttpwd=1");
+        boolean passwordResetSuccess = userService.verifyPasswordResetToken(req.getParameter("uname"), req.getParameter("token"));
+        if (passwordResetSuccess) {
+            if(userService.updateUserPassword(req.getParameter("uname"), req.getParameter("password"))) {
+                resp.sendRedirect(req.getContextPath() + "/account/new-password.jsp?succmsg=1");
+                return;
+            }
         }
+
+        // Unexpected error occurred
+        resp.sendRedirect(req.getContextPath() + "/account/new-password.jsp?errmsg=1");
     }
 
     private void handleRegistration(HttpServletRequest req, HttpServletResponse resp) throws IOException {
