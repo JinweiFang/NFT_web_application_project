@@ -70,16 +70,17 @@ public class authenticateServlet extends HttpServlet {
     private void handleLogin(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         User response = userService.authenticateUser(req.getParameter("username"), req.getParameter("password"));
 
-        // Redirect back to login page if validation failed
-        if (response == null) {
-            resp.sendRedirect(req.getContextPath() + "/account/login.jsp?errmsg=1");
+        // If login was successful
+        if(response != null) {
+            // Set up session and redirect to dashboard
+            HttpSession session = req.getSession(true);
+            session.setAttribute("user", response);
+            resp.sendRedirect(req.getContextPath() + "/dashboard");
             return;
         }
 
-        // Set up session and redirect to dashboard
-        HttpSession session = req.getSession(true);
-        session.setAttribute("user", response);
-        resp.sendRedirect(req.getContextPath() + "/dashboard");
+        // Redirect back to login page if validation failed
+        resp.sendRedirect(req.getContextPath() + "/account/login.jsp?errmsg=1");
     }
 
     private void handleReset(HttpServletRequest req, HttpServletResponse resp) throws IOException {
@@ -104,7 +105,7 @@ public class authenticateServlet extends HttpServlet {
     }
 
     private void handleNewPassword(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        boolean isValid = userService.varifyPasswordResetToken(req.getParameter("uname"), req.getParameter("token"));
+        boolean isValid = userService.verifyPasswordResetToken(req.getParameter("uname"), req.getParameter("token"));
         if (isValid) {
             if(userService.updateUserPassword(req.getParameter("uname"), req.getParameter("password")))
                 resp.sendRedirect(req.getContextPath() + "/account/login.jsp?succresttpwd=1");
