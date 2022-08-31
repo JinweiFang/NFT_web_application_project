@@ -2,6 +2,11 @@ body {
     font-family: sans-serif;
 }
 
+ul.nav li > .nav-link:hover,
+ul.nav li > .nav-link:focus {
+    color: #ffc107 !important;
+}
+
 main {
     padding: 35px 15px 15px;
 }

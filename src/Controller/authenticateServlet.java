@@ -54,7 +54,7 @@ public class authenticateServlet extends HttpServlet {
                     return;
                 }
 
-                // Show a success message
+                // If username is valid then set a token for password reset
                 if (usrResponse != null) {
                     Token tknResponse = userService.createPasswordResetTokenForUser(req.getParameter("username"));
 

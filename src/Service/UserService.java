@@ -8,6 +8,8 @@ import Data.dao.impl.userContext;
 import Domain.Token;
 import Domain.User;
 
+import java.util.List;
+
 import static Utils.DateUtils.generateUnixTimestamp;
 import static Utils.TokenUtils.generatePasswordResetToken;
 
@@ -39,6 +41,10 @@ public class UserService {
         }
 
         return null;
+    }
+
+    public List<User> getAllUsers(){
+        return (List<User>) userRepo.findAll();
     }
 
     public User findUserByUsername(String username) {
