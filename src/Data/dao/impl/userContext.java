@@ -75,7 +75,32 @@ public class userContext extends abstractConnect implements userDao {
 
     @Override
     public User save(User item) {
-        return null;
+        String sql = "INSERT INTO users(fname, lname, email, username, password) VALUES(?,?,?,?,?)";
+        boolean success = false;
+
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, item.getfName());
+            pstmt.setString(2, item.getlName());
+            pstmt.setString(3, item.getEmail());
+            pstmt.setString(4, item.getUsername());
+            pstmt.setString(5, item.getPassword());
+
+            if (pstmt.executeUpdate() == 0) throw new SQLException("Insertion failed! no rows affected.");
+
+            try (ResultSet generatedKeys = pstmt.getGeneratedKeys()) {
+                if (generatedKeys.next())
+                    item.setId(generatedKeys.getInt(1));
+                else
+                    throw new SQLException("Insertion failed! no rows affected.");
+            }
+
+            success = true;
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        return success ? item : null;
     }
 
     @Override
