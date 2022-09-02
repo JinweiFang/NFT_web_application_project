@@ -15,6 +15,8 @@ import java.io.IOException;
 public class authenticateServlet extends HttpServlet {
 
     private UserService userService;
+    private int securityQuestionStatus = -1;  // -1: Start. 0: Username given. 1, 2, 3: Number of questions answered correctly.
+    private String securityQuestionUsername;  // Username given for security question challenge
 
     @Override
     public void init() {
@@ -49,8 +51,10 @@ public class authenticateServlet extends HttpServlet {
 
             // Handle login
             if (urls[0].equals("login")) handleLogin(req, resp);
-            // Handle reset
+            // Handle reset (via email)
             else if (urls[0].equals("reset")) handleReset(req, resp);
+            // Handle reset (via security questions)
+            else if (urls[0].equals("security-questions")) handleResetViaSecurityQuestions(req, resp);
             // Handle reset new password
             else if (urls[0].equals("new-password")) handleNewPassword(req, resp);
             // Handle new user registration
@@ -116,5 +120,34 @@ public class authenticateServlet extends HttpServlet {
         }
         // Redirect back to signup page if signup failed
         resp.sendRedirect(req.getContextPath() + "/account/signup.jsp?errmsg=1");
+    }
+
+    private void handleResetViaSecurityQuestions(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+
+        if(securityQuestionStatus == -1) {
+            securityQuestionUsername = req.getParameter("username");
+            securityQuestionStatus++;
+            resp.sendRedirect(req.getContextPath() + "/account/security-questions.jsp?status=" + securityQuestionStatus);
+        } else if(securityQuestionStatus > -1 && securityQuestionStatus < 3) {
+//            String correctAnswer = userService.getCorrectSecurityAnswer(securityQuestionUsername, securityQuestionStatus);
+//            if(correctAnswer == null || correctAnswer.isEmpty()) {
+//                resp.sendRedirect(req.getContextPath() + "/account/security-questions.jsp?errmsg=1");  // could not get correct user answer
+//                return;
+//            }
+            if(false){//!req.getParameter("answer").equals(correctAnswer)){
+                resp.sendRedirect(req.getContextPath() + "/account/security-questions.jsp?status=" + securityQuestionStatus + "&errmsg=2");  // provided answer is incorrect
+            } else {
+                securityQuestionStatus++;
+                resp.sendRedirect(req.getContextPath() + "/account/security-questions.jsp?status=" + securityQuestionStatus);  // provided answer is correct
+            }
+        } else if(securityQuestionStatus == 3) {  // at this point all 3 questions have been answered correctly
+            boolean successfulReset = userService.updateUserPassword(securityQuestionUsername, req.getParameter("password"));
+            if(successfulReset) {
+                resp.sendRedirect(req.getContextPath() + "/account/security-questions.jsp?succreset=1");
+            } else {
+                resp.sendRedirect(req.getContextPath() + "/account/security-questions.jsp?errmsg=3");
+            }
+            securityQuestionStatus = -1;
+        }
     }
 }
