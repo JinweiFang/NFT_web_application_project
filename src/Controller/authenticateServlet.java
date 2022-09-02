@@ -78,13 +78,7 @@ public class authenticateServlet extends HttpServlet {
 
     private void handleReset(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         User usrResponse = userService.findUserByUsername(req.getParameter("username"));
-
-        // Redirect back to login page if validation failed
-        if (usrResponse == null) {
-            resp.sendRedirect(req.getContextPath() + "/account/reset.jsp?errmsg=1");
-            return;
-        }
-
+        
         // If username is valid then set a token for password reset
         if (usrResponse != null) {
             Token tknResponse = userService.createPasswordResetTokenForUser(req.getParameter("username"));
@@ -94,6 +88,9 @@ public class authenticateServlet extends HttpServlet {
                 System.out.println("http://localhost:8080/account/new-password.jsp?uname="+tknResponse.getUsername()+"&token="+tknResponse.getTokenValue());
             }
         }
+
+        // Redirect back to login page if validation failed
+        resp.sendRedirect(req.getContextPath() + "/account/reset.jsp?errmsg=1");
     }
 
     private void handleNewPassword(HttpServletRequest req, HttpServletResponse resp) throws IOException {
