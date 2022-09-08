@@ -115,4 +115,20 @@ public class UserService {
 
         return false;
     }
+
+    public boolean updatePersonalInfo(String fName, String lName, String email, String username, int id) {
+        // Sanitize input
+        if (!fName.isBlank() && !lName.isBlank() && !email.isBlank() && !username.isBlank()) {
+            // Sanitize input sure the input is proper
+            User usr = new User();
+            usr.setUsername(username);
+            usr.setEmail(email);
+            usr.setfName(fName);
+            usr.setlName(lName);
+            usr.setId(id);
+
+            return userRepo.updatePersonalInfo(usr) != null;
+        }
+        return false;
+    }
 }

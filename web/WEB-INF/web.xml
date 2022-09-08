@@ -16,6 +16,10 @@
         <servlet-name>dashboardServlet</servlet-name>
         <servlet-class>Controller.dashboardServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>profileServlet</servlet-name>
+        <servlet-class>Controller.profileServlet</servlet-class>
+    </servlet>
 
     <servlet-mapping>
         <servlet-name>authenticateServlet</servlet-name>
@@ -24,5 +28,9 @@
     <servlet-mapping>
         <servlet-name>dashboardServlet</servlet-name>
         <url-pattern>/dashboard/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>profileServlet</servlet-name>
+        <url-pattern>/profile/*</url-pattern>
     </servlet-mapping>
 </web-app>
