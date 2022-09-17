@@ -117,9 +117,13 @@ public class UserService {
         return false;
     }
 
-    public boolean checkSecurityAnswer(String username, int status, String answerToCheck){
-        if(username.isBlank() || answerToCheck.isBlank() || status < 0 || status > 2) return false;
-        String correctAnswer = userRepo.getSecurityAnswer(username, status);
-        return answerToCheck.equals(correctAnswer);
+    public boolean[] checkSecurityAnswers(String username, String ans1, String ans2, String ans3){
+        String correctAnswer1 = userRepo.getSecurityAnswer(username, 0);
+        String correctAnswer2 = userRepo.getSecurityAnswer(username, 1);
+        String correctAnswer3 = userRepo.getSecurityAnswer(username, 2);
+
+        boolean[] correct = {ans1.equals(correctAnswer1), ans2.equals(correctAnswer2), ans3.equals(correctAnswer3)};
+        return correct;
     }
+
 }
