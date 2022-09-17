@@ -97,9 +97,9 @@ public class UserService {
         return false;
     }
 
-    public boolean registerUser(String fName, String lName, String email, String username, String password){
+    public boolean registerUser(String fName, String lName, String email, String username, String password, String secAns1, String secAns2, String secAns3){
         // Sanitize input
-        if (!fName.isBlank() && !lName.isBlank() && !email.isBlank() && !username.isBlank() && !password.isBlank()) {
+        if (!fName.isBlank() && !lName.isBlank() && !email.isBlank() && !username.isBlank() && !password.isBlank() && !secAns1.isBlank() && !secAns2.isBlank() && !secAns3.isBlank()) {
             // If user already exists, don't attempt to save new user
             if (findUserByUsername(username) != null) return false;
 
@@ -110,9 +110,20 @@ public class UserService {
             usr.setEmail(email);
             usr.setUsername(username);
             usr.setPassword(password);
+            usr.setSecAnswers(secAns1, secAns2, secAns3);
             if (userRepo.save(usr) != null) return true;
         }
 
         return false;
     }
+
+    public boolean[] checkSecurityAnswers(String username, String ans1, String ans2, String ans3){
+        String correctAnswer1 = userRepo.getSecurityAnswer(username, 0);
+        String correctAnswer2 = userRepo.getSecurityAnswer(username, 1);
+        String correctAnswer3 = userRepo.getSecurityAnswer(username, 2);
+
+        boolean[] correct = {ans1.equals(correctAnswer1), ans2.equals(correctAnswer2), ans3.equals(correctAnswer3)};
+        return correct;
+    }
+
 }
