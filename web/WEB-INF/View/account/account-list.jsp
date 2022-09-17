@@ -20,6 +20,7 @@
                 <th scope="col">Email</th>
                 <th scope="col">Balance</th>
                 <th scope="col">isAdmin</th>
+                <th scope="col">Action</th>
             </tr>
             </thead>
             <tbody>
@@ -32,6 +33,7 @@
                 <td><%=usr.getEmail()%></td>
                 <td>$<%=usr.getBalance()%></td>
                 <td><%=usr.isAdmin() ? "Yes" : "No"%></td>
+                <td><a href="/u/@<%=usr.getUsername()%>">View</a></td>
             </tr>
             <% } %>
             </tbody>
