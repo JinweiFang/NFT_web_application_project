@@ -14,22 +14,22 @@
                 <div>
                     <label for="fName">First Name : </label>
                     <input type=text name="fName" class="form-control" id="fName"
-                           placeholder="<%= currentUser.getfName()%>"><br>
+                           value="<%= currentUser.getfName()%>"><br>
                 </div>
                 <div>
                     <label for="lName">Last Name : </label>
                     <input type=text name="lName" class="form-control" id="lName"
-                           placeholder="<%= currentUser.getlName()%>"><br>
+                           value="<%= currentUser.getlName()%>"><br>
                 </div>
                 <div>
                     <label for="username">Username : </label>
                     <input type=text name="username" class="form-control" id="username"
-                           placeholder="<%= currentUser.getUsername()%>"><br>
+                           value="<%= currentUser.getUsername()%>"><br>
                 </div>
                 <div>
                     <label for="email">Email : </label>
                     <input type=text name = "email" class="form-control" id="email"
-                           placeholder="<%= currentUser.getEmail()%>"><br>
+                           value="<%= currentUser.getEmail()%>"><br>
                 </div>
                 <div>
                     <input type="hidden" name="passwordValidate" class="form-control" id="passwordValidate"
