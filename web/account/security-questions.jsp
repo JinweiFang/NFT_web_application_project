@@ -22,7 +22,7 @@
                 <% } %>
                 <% if (request.getParameterMap().containsKey("errmsg") && request.getParameter("errmsg").equals("2")) { %>
                 <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    Incorrect answer!
+                    Incorrect answer, or other error
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
                 <% } %>

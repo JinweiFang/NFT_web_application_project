@@ -114,7 +114,9 @@ public class authenticateServlet extends HttpServlet {
     }
 
     private void handleRegistration(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        if(userService.registerUser(req.getParameter("fName"), req.getParameter("lName"), req.getParameter("email"), req.getParameter("username"), req.getParameter("password"))) {
+        if(userService.registerUser(req.getParameter("fName"), req.getParameter("lName"), req.getParameter("email"),
+                req.getParameter("username"), req.getParameter("password"), req.getParameter("secAns1"),
+                req.getParameter("secAns2"), req.getParameter("secAns3"))) {
             resp.sendRedirect(req.getContextPath() + "/account/signup.jsp?succsignup=1");
             return;
         }
@@ -129,12 +131,8 @@ public class authenticateServlet extends HttpServlet {
             securityQuestionStatus++;
             resp.sendRedirect(req.getContextPath() + "/account/security-questions.jsp?status=" + securityQuestionStatus);
         } else if(securityQuestionStatus > -1 && securityQuestionStatus < 3) {
-//            String correctAnswer = userService.getCorrectSecurityAnswer(securityQuestionUsername, securityQuestionStatus);
-//            if(correctAnswer == null || correctAnswer.isEmpty()) {
-//                resp.sendRedirect(req.getContextPath() + "/account/security-questions.jsp?errmsg=1");  // could not get correct user answer
-//                return;
-//            }
-            if(false){//!req.getParameter("answer").equals(correctAnswer)){
+            boolean secAnswerCorrect = userService.checkSecurityAnswer(securityQuestionUsername, securityQuestionStatus, req.getParameter("answer"));
+            if(!secAnswerCorrect){
                 resp.sendRedirect(req.getContextPath() + "/account/security-questions.jsp?status=" + securityQuestionStatus + "&errmsg=2");  // provided answer is incorrect
             } else {
                 securityQuestionStatus++;
