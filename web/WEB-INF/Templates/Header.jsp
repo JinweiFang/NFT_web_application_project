@@ -28,17 +28,17 @@
                 <li><a href="${pageContext.request.contextPath}/" class="nav-link px-2 text-white">Home</a></li>
                 <li><a href="#about" class="nav-link px-2 text-white">About</a></li>
             </ul>
-            <%-- If logged in then only show logout button --%>
+            <%-- If logged in only then show logout button --%>
             <% if (currentUser != null && currentUser.getId() > 0) {%>
             <div class="flex-shrink-0 dropdown">
                 <a href="#" class="d-block link-light text-decoration-none dropdown-toggle" id="dropdownUser2" data-bs-toggle="dropdown" aria-expanded="false">
-<%--                    <img src="https://johnpiapian.github.io/imgs/me.jpg" alt="mdo" width="32" height="32" class="rounded-circle">--%>
+                    <%--<img src="https://johnpiapian.github.io/imgs/me.jpg" alt="mdo" width="32" height="32" class="rounded-circle">--%>
                     <span><%=currentUser.getfName()%></span>
                 </a>
                 <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser2" style="">
                     <li><a class="dropdown-item" href="${pageContext.request.contextPath}/dashboard">Dashboard</a></li>
-                    <% if (currentUser.getIsAdmin() == 1) {%>
-                    <li><a class="dropdown-item" href="${pageContext.request.contextPath}/dashboard/account-list">Account List</a></li>
+                    <% if (currentUser.isAdmin()) {%>
+                    <li><a class="dropdown-item" href="${pageContext.request.contextPath}/u/account-list">Account List</a></li>
                     <% } %>
                     <li><a class="dropdown-item" href="#">Profile</a></li>
                     <li><a class="dropdown-item" href="#">Settings</a></li>

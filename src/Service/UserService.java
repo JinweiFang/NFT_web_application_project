@@ -41,6 +41,11 @@ public class UserService {
         return (List<User>) userRepo.findAll();
     }
 
+    /**
+     *
+     * @param username
+     * @return user dto or null if user doesn't exist
+     */
     public User findUserByUsername(String username) {
         // Sanitize input
         if (!username.isBlank()) {

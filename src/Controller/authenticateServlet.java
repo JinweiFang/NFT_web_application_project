@@ -78,7 +78,7 @@ public class authenticateServlet extends HttpServlet {
 
     private void handleReset(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         User usrResponse = userService.findUserByUsername(req.getParameter("username"));
-        
+
         // If username is valid then set a token for password reset
         if (usrResponse != null) {
             Token tknResponse = userService.createPasswordResetTokenForUser(req.getParameter("username"));
