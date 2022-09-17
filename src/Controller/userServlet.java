@@ -35,7 +35,8 @@ public class userServlet extends HttpServlet {
 
         // Handle url routing
         if (req.getPathInfo() != null && req.getPathInfo().length() > 1) {
-            // Remove the first character and then split the url /@servlet/hello/world/ -> [hello, world, ]
+            // Remove the first character and then split the url
+            // For example: /@servlet/hello/world/ -> [hello, world, ]
             String urls[] = req.getPathInfo().substring(1).split("/");
 
             // Admin area
@@ -49,21 +50,21 @@ public class userServlet extends HttpServlet {
                     if (found != null) displayMessage(req, resp, "Display user profile for @" + found.getUsername());
                     else displayMessage(req, resp, "User could not be found!");
                 }
-            // Regular user
-            } else if (!loggedUser.isAdmin()) {
+            }
+
+            // User area
+            if (!loggedUser.isAdmin()) {
                 // Route -> /u/@username
                 if(urls[0].startsWith("@")) {
                     User found = userService.findUserByUsername(urls[0].substring(1));
 
                     if (found != null && found.getUsername().equals(loggedUser.getUsername())) displayMessage(req, resp, "Display user profile for @" + found.getUsername());
-                    else displayMessage(req, resp, "There was an error while trying to find the user!");
+                    else displayMessage(req, resp, "User could not be found!");
                 }
             }
-
-            displayMessage(req, resp,"Sorry, admin account is needed to access this page!");
         }
 
-        resp.sendRedirect("/");
+        resp.sendError(HttpServletResponse.SC_NOT_FOUND); // 404 Error
     }
 
     private void displayMessage(HttpServletRequest req, HttpServletResponse resp, String msg) throws ServletException, IOException {

@@ -41,7 +41,6 @@ public class dashboardServlet extends HttpServlet {
 
             String msg = "Sorry, admin account is needed to access this page!";
             if(!loggedUser.isAdmin()) dispatchToJSP(req, resp, "/WEB-INF/View/display-message.jsp?msg=" + msg);
-
         }
 
         // Pass the request onto jsp page
