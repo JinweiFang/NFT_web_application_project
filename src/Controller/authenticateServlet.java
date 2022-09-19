@@ -11,6 +11,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.Iterator;
+import java.util.Map;
 
 public class authenticateServlet extends HttpServlet {
 
@@ -40,21 +42,23 @@ public class authenticateServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         // Handle url routing
         // for example: [currentServlet]/someurl/..
         if (req.getPathInfo() != null && req.getPathInfo().length() > 1) {
             // Remove the first character and then split the url /hello/world -> [hello, world]
             String urls[] = req.getPathInfo().substring(1).split("/");
 
-            // Handle login
+            // Route -> authenticate/login
             if (urls[0].equals("login")) handleLogin(req, resp);
-            // Handle reset
+            // Route -> authenticate/reset
             else if (urls[0].equals("reset")) handleReset(req, resp);
-            // Handle reset new password
+            // Route -> authenticate/new-password
             else if (urls[0].equals("new-password")) handleNewPassword(req, resp);
-            // Handle new user registration
-            else if (urls[0].equals("signup")) handleRegistration(req, resp);
+            // Route -> authenticate/register
+            else if (urls[0].equals("register")) handleRegistration(req, resp);
+            // Route -> authenticate/register@admin
+            else if (urls[0].equals("register@admin")) handleRegistrationByAdmin(req, resp);
         }
     }
 
@@ -113,5 +117,35 @@ public class authenticateServlet extends HttpServlet {
         }
         // Redirect back to signup page if signup failed
         resp.sendRedirect(req.getContextPath() + "/account/signup.jsp?errmsg=1");
+    }
+
+    /*
+    Having a separate method is crucial for security purposes
+    It also makes it easier to handle error message
+     */
+    private void handleRegistrationByAdmin(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+
+        // Handle unauthorized access (must be admin)
+        HttpSession session = req.getSession(false);
+        User loggedUser = (User) session.getAttribute("user");
+
+        if (session == null || loggedUser == null || !loggedUser.isAdmin()) {
+            String msg = "Must be an admin!";
+            RequestDispatcher dispatcher = req.getRequestDispatcher(req.getContextPath() + "/WEB-INF/View/display-message.jsp?msg=" + msg);
+            dispatcher.forward(req, resp);
+            return;
+        }
+
+        boolean registrationSuccess = userService.registerUser(req.getParameter("fName"), req.getParameter("lName"),
+                req.getParameter("email"), req.getParameter("username"), req.getParameter("password"),
+                req.getParameter("balance"), req.getParameter("accountType"));
+
+        if(registrationSuccess) {
+            resp.sendRedirect(req.getContextPath() + "/u/account-list?succsignup=1");
+            return;
+        }
+
+        // Redirect back to account list if registration failed
+        resp.sendRedirect(req.getContextPath() + "/u/account-list?errmsg=1");
     }
 }

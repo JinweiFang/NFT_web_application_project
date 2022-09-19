@@ -101,7 +101,7 @@ public class userContext extends abstractConnect implements userDao {
 
     @Override
     public User save(User item) {
-        String sql = "INSERT INTO users(fname, lname, email, username, password) VALUES(?,?,?,?,?)";
+        String sql = "INSERT INTO users(fname, lname, email, username, password, balance, isAdmin) VALUES(?,?,?,?,?,?,?)";
         boolean success = false;
 
         try {
@@ -111,6 +111,8 @@ public class userContext extends abstractConnect implements userDao {
             pstmt.setString(3, item.getEmail());
             pstmt.setString(4, item.getUsername());
             pstmt.setString(5, item.getPassword());
+            pstmt.setDouble(6, item.getBalance());
+            pstmt.setInt(7, item.getIsAdmin());
 
             if (pstmt.executeUpdate() == 0) throw new SQLException("Insertion failed! no rows affected.");
 

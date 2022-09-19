@@ -24,14 +24,13 @@ public class userServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        // Handle unauthorized access (must be logged in to access this file
+        // Handle unauthorized access (must be logged in to access this file)
         HttpSession session = req.getSession(false);
-        if (session == null || session.getAttribute("user") == null) {
+        User loggedUser = (User) session.getAttribute("user");
+        if (session == null || loggedUser == null) {
             resp.sendRedirect(req.getContextPath() + "/account/login.jsp");
             return;
         }
-
-        User loggedUser = (User) session.getAttribute("user");
 
         // Handle url routing
         if (req.getPathInfo() != null && req.getPathInfo().length() > 1) {
@@ -42,7 +41,7 @@ public class userServlet extends HttpServlet {
             // Admin area
             if(loggedUser.isAdmin()) {
                 // Route -> /u/account-list
-                if (urls[0].equals("account-list")) handleAccountList(req, resp);
+                if(urls[0].equals("account-list")) handleAccountList(req, resp);
                 // Route -> /u/@username
                 if(urls[0].startsWith("@")) {
                     User found = userService.findUserByUsername(urls[0].substring(1));
@@ -52,7 +51,7 @@ public class userServlet extends HttpServlet {
                 }
             }
 
-            // User area
+            // Regular user area
             if (!loggedUser.isAdmin()) {
                 // Route -> /u/@username
                 if(urls[0].startsWith("@")) {

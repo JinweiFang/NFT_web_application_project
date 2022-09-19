@@ -48,10 +48,8 @@
             </div>
             <% } else { %>
             <div class="text-end">
-                <a href="${pageContext.request.contextPath}/account/login.jsp"
-                   class="btn btn-outline-light me-2">Login</a>
-                <a href="${pageContext.request.contextPath}/account/signup.jsp" class="btn btn-outline-warning">Sign
-                    up</a>
+                <a href="${pageContext.request.contextPath}/account/login.jsp" class="btn btn-outline-light me-2">Login</a>
+                <a href="${pageContext.request.contextPath}/account/signup.jsp" class="btn btn-outline-warning">Sign up</a>
             </div>
             <% } %>
         </div>
