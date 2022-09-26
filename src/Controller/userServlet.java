@@ -26,8 +26,8 @@ public class userServlet extends HttpServlet {
 
         // Handle unauthorized access (must be logged in to access this file)
         HttpSession session = req.getSession(false);
-        User loggedUser = (User) session.getAttribute("user");
-        if (session == null || loggedUser == null) {
+        User loggedUser = (session == null) ? null : (User) session.getAttribute("user");
+        if (loggedUser == null) {
             resp.sendRedirect(req.getContextPath() + "/account/login.jsp");
             return;
         }

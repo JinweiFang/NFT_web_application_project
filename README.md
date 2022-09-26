@@ -12,7 +12,7 @@ Cybersecurity NFT shop project
 - Database
   - SQLite 3.39
 - Server
-  - Tomcat 9
+  - Servlet container - Tomcat 9 
 - Build tools
   - Maven
 - Front-end
@@ -20,9 +20,9 @@ Cybersecurity NFT shop project
   - Bootstrap
 
 
-### System Design
+### Architectural Design
 #### MVC
-This project make use of MVC design pattern with custom implementation to suit the project.
+This project make use of MVC architecture with custom implementation to suit the project.
 
 - **Model**
   - Every entity in the project is a model
