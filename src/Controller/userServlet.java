@@ -24,7 +24,7 @@ public class userServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        // Handle unauthorized access (must be logged in to access this file)
+        // Handle unauthorized access (must be logged in to access this area)
         HttpSession session = req.getSession(false);
         User loggedUser = (session == null) ? null : (User) session.getAttribute("user");
         if (loggedUser == null) {
@@ -38,28 +38,12 @@ public class userServlet extends HttpServlet {
             // For example: /@servlet/hello/world/ -> [hello, world, ]
             String urls[] = req.getPathInfo().substring(1).split("/");
 
-            // Admin area
-            if(loggedUser.isAdmin()) {
-                // Route -> /u/account-list
-                if(urls[0].equals("account-list")) handleAccountList(req, resp);
-                // Route -> /u/@username
-                if(urls[0].startsWith("@")) {
-                    User found = userService.findUserByUsername(urls[0].substring(1));
+            // Route -> /u/@username
+            if(urls[0].startsWith("@")) {
+                User found = userService.findUserByUsername(urls[0].substring(1));
 
-                    if (found != null) displayMessage(req, resp, "Display user profile for @" + found.getUsername());
-                    else displayMessage(req, resp, "User could not be found!");
-                }
-            }
-
-            // Regular user area
-            if (!loggedUser.isAdmin()) {
-                // Route -> /u/@username
-                if(urls[0].startsWith("@")) {
-                    User found = userService.findUserByUsername(urls[0].substring(1));
-
-                    if (found != null && found.getUsername().equals(loggedUser.getUsername())) displayMessage(req, resp, "Display user profile for @" + found.getUsername());
-                    else displayMessage(req, resp, "User could not be found!");
-                }
+                if (found != null && found.getUsername().equals(loggedUser.getUsername())) displayMessage(req, resp, "Display user profile for @" + found.getUsername());
+                else displayMessage(req, resp, "User could not be found!");
             }
         }
 
@@ -68,14 +52,6 @@ public class userServlet extends HttpServlet {
 
     private void displayMessage(HttpServletRequest req, HttpServletResponse resp, String msg) throws ServletException, IOException {
         RequestDispatcher dispatcher = req.getRequestDispatcher(req.getContextPath() + "/WEB-INF/View/display-message.jsp?msg=" + msg);
-        dispatcher.forward(req, resp);
-    }
-
-    private void handleAccountList(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        List<User> users = userService.getAllUsers();
-
-        req.setAttribute("users", users);
-        RequestDispatcher dispatcher = req.getRequestDispatcher(req.getContextPath() + "/WEB-INF/View/account/account-list.jsp");
         dispatcher.forward(req, resp);
     }
 }

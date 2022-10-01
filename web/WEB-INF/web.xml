@@ -20,6 +20,10 @@
         <servlet-name>userServlet</servlet-name>
         <servlet-class>Controller.userServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>adminServlet</servlet-name>
+        <servlet-class>Controller.adminServlet</servlet-class>
+    </servlet>
 
     <servlet-mapping>
         <servlet-name>authenticateServlet</servlet-name>
@@ -31,6 +35,10 @@
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>userServlet</servlet-name>
-        <url-pattern>/u/*</url-pattern>
+        <url-pattern>/user/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>adminServlet</servlet-name>
+        <url-pattern>/admin/*</url-pattern>
     </servlet-mapping>
 </web-app>
