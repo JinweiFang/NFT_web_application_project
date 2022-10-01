@@ -11,6 +11,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.ArrayList;
 
 public class authenticateServlet extends HttpServlet {
 
@@ -70,6 +72,7 @@ public class authenticateServlet extends HttpServlet {
             // Set up session and redirect to dashboard
             HttpSession session = req.getSession(true);
             session.setAttribute("user", response);
+            session.setAttribute("cart", new ArrayList<>(Arrays.asList(123,456,789)));  // TODO temporary method of putting items in cart for development
             resp.sendRedirect(req.getContextPath() + "/dashboard");
             return;
         }
