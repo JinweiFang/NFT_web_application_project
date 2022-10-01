@@ -6,14 +6,11 @@ import Service.UserService;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.Iterator;
-import java.util.Map;
 
 public class authenticateServlet extends HttpServlet {
 
@@ -26,24 +23,19 @@ public class authenticateServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        // Handle logout
-        if (req.getParameterMap().containsKey("logout") && req.getParameter("logout").equals("1")) {
-            HttpSession session = req.getSession(false);
-            session.invalidate();
-            resp.sendRedirect(req.getContextPath() + "/");
-        }
-
         // Handle url routing
         if (req.getPathInfo() != null && req.getPathInfo().length() > 1) {
             // Remove the first character and then split the url /hello/world -> [hello, world]
             String urls[] = req.getPathInfo().substring(1).split("/");
+
+            if (urls[0].equals("logout")) handleLogout(req, resp);
         }
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         // Handle url routing
-        // for example: [currentServlet]/someurl/..
+        // for example: [servlet]/someurl/..
         if (req.getPathInfo() != null && req.getPathInfo().length() > 1) {
             // Remove the first character and then split the url /hello/world -> [hello, world]
             String urls[] = req.getPathInfo().substring(1).split("/");
@@ -66,6 +58,12 @@ public class authenticateServlet extends HttpServlet {
     }
 
     // HELPER METHODS
+    private void handleLogout(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        HttpSession session = req.getSession(false);
+        session.invalidate();
+        resp.sendRedirect(req.getContextPath() + "/");
+    }
+
     private void handleLogin(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         User response = userService.authenticateUser(req.getParameter("username"), req.getParameter("password"));
 
@@ -136,6 +134,7 @@ public class authenticateServlet extends HttpServlet {
             return;
         }
     }
+
     private void handleRegistrationByAdmin(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         // Handle unauthorized access (must be admin)
         handleUnauthorizedAccessByNonAdmin(req, resp);
@@ -145,13 +144,14 @@ public class authenticateServlet extends HttpServlet {
                 req.getParameter("accountType"));
 
         if(registrationSuccess) {
-            resp.sendRedirect(req.getContextPath() + "/u/account-list?successmsg=1");
+            resp.sendRedirect(req.getContextPath() + "/admin/account-list?successmsg=1");
             return;
         }
 
         // Redirect back to account list if registration failed
-        resp.sendRedirect(req.getContextPath() + "/u/account-list?errmsg=1");
+        resp.sendRedirect(req.getContextPath() + "/admin/account-list?errmsg=1");
     }
+
     private void handleUpdateByAdmin(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         // Handle unauthorized access (must be admin)
         handleUnauthorizedAccessByNonAdmin(req, resp);
@@ -161,14 +161,13 @@ public class authenticateServlet extends HttpServlet {
                 req.getParameter("accountType"));
 
         if(updateSuccess) {
-            resp.sendRedirect(req.getContextPath() + "/u/account-list?successmsg=1");
+            resp.sendRedirect(req.getContextPath() + "/admin/account-list?successmsg=1");
             return;
         }
 
         // Redirect back to account list if registration failed
-        resp.sendRedirect(req.getContextPath() + "/u/account-list?errmsg=1");
+        resp.sendRedirect(req.getContextPath() + "/admin/account-list?errmsg=1");
     }
-
 
     private void handleDeletionByAdmin(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         // Handle unauthorized access (must be admin)
@@ -177,11 +176,11 @@ public class authenticateServlet extends HttpServlet {
         boolean deletionSuccess = userService.deleteUserById(req.getParameter("id"));
 
         if(deletionSuccess) {
-            resp.sendRedirect(req.getContextPath() + "/u/account-list?successmsg=1");
+            resp.sendRedirect(req.getContextPath() + "/admin/account-list?successmsg=1");
             return;
         }
 
         // Redirect back to account list if registration failed
-        resp.sendRedirect(req.getContextPath() + "/u/account-list?errmsg=1");
+        resp.sendRedirect(req.getContextPath() + "/admin/account-list?errmsg=1");
     }
 }

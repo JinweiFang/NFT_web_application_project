@@ -28,7 +28,7 @@
                 <li><a href="${pageContext.request.contextPath}/" class="nav-link px-2 text-white">Home</a></li>
                 <li><a href="#about" class="nav-link px-2 text-white">About</a></li>
             </ul>
-            <%-- If logged in only then show logout button --%>
+            <%-- If logged-in, only then show logout button --%>
             <% if (currentUser != null && currentUser.getId() > 0) {%>
             <div class="flex-shrink-0 dropdown">
                 <a href="#" class="d-block link-light text-decoration-none dropdown-toggle" id="dropdownUser2" data-bs-toggle="dropdown" aria-expanded="false">

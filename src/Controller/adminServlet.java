@@ -42,17 +42,7 @@ public class adminServlet extends HttpServlet {
                 RequestDispatcher dispatcher = req.getRequestDispatcher(req.getContextPath() + "/WEB-INF/View/account/account-list.jsp");
                 dispatcher.forward(req, resp);
             }
-            else if (urls[0].equals("@")) {
-                User found = userService.findUserByUsername(urls[0].substring(1));
-                if (found != null) displayMessage(req, resp, "Display user profile for @" + found.getUsername());
-                else displayMessage(req, resp, "User could not be found!");
-            }
         }
-    }
-
-    private void displayMessage(HttpServletRequest req, HttpServletResponse resp, String msg) throws ServletException, IOException {
-        RequestDispatcher dispatcher = req.getRequestDispatcher(req.getContextPath() + "/WEB-INF/View/display-message.jsp?msg=" + msg);
-        dispatcher.forward(req, resp);
     }
 
     private boolean isAdmin(HttpServletRequest req, HttpServletResponse resp) throws IOException {
