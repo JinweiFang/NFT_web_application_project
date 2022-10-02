@@ -43,7 +43,7 @@
                     <li><a class="dropdown-item" href="${pageContext.request.contextPath}/user/@<%=currentUser.getUsername()%>">Profile</a></li>
                     <li><a class="dropdown-item" href="#">Settings</a></li>
                     <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-item" href="${pageContext.request.contextPath}/authenticate?logout=1">Log Out</a></li>
+                    <li><a class="dropdown-item" href="${pageContext.request.contextPath}/authenticate/logout">Log Out</a></li>
                 </ul>
             </div>
             <% } else { %>
