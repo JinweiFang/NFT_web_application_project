@@ -2,7 +2,7 @@ package Domain;
 
 public class User {
     private int id, isAdmin;
-    private String fName, lName, email, username, password;
+    private String fName, lName, email, username, password, secAns1, secAns2, secAns3;
     private double balance;
 
     public User(){}
@@ -89,5 +89,17 @@ public class User {
     public boolean isAdmin(){
         return getIsAdmin() == 1;
     }
+
+    public void setSecAnswers(String secAns1, String secAns2, String secAns3){
+        this.secAns1 = secAns1;
+        this.secAns2 = secAns2;
+        this.secAns3 = secAns3;
+    }
+
+    public String getSecAns1() { return secAns1; }
+
+    public String getSecAns2() { return secAns2; }
+
+    public String getSecAns3() { return secAns3; }
 
 }

@@ -51,6 +51,24 @@
                            placeholder="Password"
                            required>
                 </div>
+                <div class="form-row form-group">
+                    <label for="inputSecurityAnswer1">Security question 1: What city were you born in?</label>
+                    <input type="text" name="secAns1" class="form-control" id="inputSecurityAnswer1"
+                           placeholder="Answer"
+                           required>
+                </div>
+                <div class="form-row form-group">
+                    <label for="inputSecurityAnswer2">Security question 2: What was your favorite food as a child?</label>
+                    <input type="text" name="secAns2" class="form-control" id="inputSecurityAnswer2"
+                           placeholder="Answer"
+                           required>
+                </div>
+                <div class="form-row form-group">
+                    <label for="inputSecurityAnswer3">Security question 3: What was the name of your elementary school?</label>
+                    <input type="text" name="secAns3" class="form-control" id="inputSecurityAnswer3"
+                           placeholder="Answer"
+                           required>
+                </div>
                 <div class="form-row">
                     <button type="submit" class="btn btn-primary">Submit</button>
                 </div>

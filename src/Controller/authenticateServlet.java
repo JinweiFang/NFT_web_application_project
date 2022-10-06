@@ -44,6 +44,8 @@ public class authenticateServlet extends HttpServlet {
             if (urls[0].equals("login")) handleLogin(req, resp);
             // Route -> authenticate/reset
             else if (urls[0].equals("reset")) handleReset(req, resp);
+            // Route -> authenticate/security-questions
+            else if (urls[0].equals("security-questions")) handleResetViaSecurityQuestions(req, resp);
             // Route -> authenticate/new-password
             else if (urls[0].equals("new-password")) handleNewPassword(req, resp);
             // Route -> authenticate/register
@@ -56,6 +58,7 @@ public class authenticateServlet extends HttpServlet {
             else if (urls[0].equals("delete@admin")) handleDeletionByAdmin(req, resp);
         }
     }
+
 
     // HELPER METHODS
     private void handleLogout(HttpServletRequest req, HttpServletResponse resp) throws IOException {
@@ -111,13 +114,47 @@ public class authenticateServlet extends HttpServlet {
     }
 
     private void handleRegistration(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        if(userService.registerUser(req.getParameter("fName"), req.getParameter("lName"), req.getParameter("email"), req.getParameter("username"), req.getParameter("password"))) {
+        if(userService.registerUser(req.getParameter("fName"), req.getParameter("lName"), req.getParameter("email"),
+                req.getParameter("username"), req.getParameter("password"), req.getParameter("secAns1"),
+                req.getParameter("secAns2"), req.getParameter("secAns3"))) {
             resp.sendRedirect(req.getContextPath() + "/account/signup.jsp?succsignup=1");
             return;
         }
         // Redirect back to signup page if signup failed
         resp.sendRedirect(req.getContextPath() + "/account/signup.jsp?errmsg=1");
     }
+
+    private void handleResetViaSecurityQuestions(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+
+        User usrResponse = userService.findUserByUsername(req.getParameter("username"));
+
+        if (usrResponse == null) {  // User not found
+            resp.sendRedirect(req.getContextPath() + "/account/security-questions.jsp?errmsg=4");
+            return;
+        }
+
+        boolean[] correct = userService.checkSecurityAnswers(req.getParameter("username"), req.getParameter("secAns1"), req.getParameter("secAns2"), req.getParameter("secAns3"));
+
+        String redirect = req.getContextPath() + "/account/security-questions.jsp?";
+        if(correct[0] && correct[1] && correct[2]){
+            boolean successfulReset = userService.updateUserPassword(req.getParameter("username"), req.getParameter("password"));
+            if(successfulReset) {
+                redirect += "succreset=1";
+            } else {
+                redirect += "errmsg=3";
+            }
+        } else {
+            redirect += "errmsg=2";
+
+            if(!correct[0]) redirect += "&badAns1=1";
+            if(!correct[1]) redirect += "&badAns2=1";
+            if(!correct[2]) redirect += "&badAns3=1";
+        }
+
+        resp.sendRedirect(redirect);
+    }
+
+
 
     /*
     Having separate method methods for admin is crucial for security purposes
