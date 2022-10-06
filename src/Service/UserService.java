@@ -121,9 +121,9 @@ public class UserService {
      * @param isAdmin
      * @return true or false
      */
-    private boolean registerUser(String fName, String lName, String email, String username, String password, double balance, int isAdmin){
+    private boolean registerUser(String fName, String lName, String email, String username, String password, double balance, int isAdmin, String secAns1, String secAns2, String secAns3){
         // Sanitize input
-        if (!fName.isBlank() && !lName.isBlank() && !email.isBlank() && !username.isBlank() && !password.isBlank() && !secAns1.isBlank() && !secAns2.isBlank() && !secAns3.isBlank()) {
+        if (!fName.isBlank() && !lName.isBlank() && !email.isBlank() && !username.isBlank() && !password.isBlank()) {
             // If user already exists, don't attempt to save new user
             if (findUserByUsername(username) != null) return false;
 
@@ -136,6 +136,9 @@ public class UserService {
             usr.setPassword(password);
             usr.setBalance(balance);
             usr.setIsAdmin(isAdmin);
+            usr.setSecAnswers(secAns1, secAns2, secAns3);
+
+            System.out.println("Attempting to register!");
 
             return userRepo.save(usr) != null;
         }
@@ -143,14 +146,49 @@ public class UserService {
         return false;
     }
 
+    /**
+     * Bare minimum registration requirement
+     * @param fName
+     * @param lName
+     * @param email
+     * @param username
+     * @param password
+     * @return
+     */
     public boolean registerUser(String fName, String lName, String email, String username, String password){
-        return registerUser(fName, lName, email, username, password, 0, 0);
+        return registerUser(fName, lName, email, username, password, 0, 0, "", "", "");
     }
 
+    /**
+     * Registration with security questions, but excluding balance and isAdmin
+     * @param fName
+     * @param lName
+     * @param email
+     * @param username
+     * @param password
+     * @param secAns1
+     * @param secAns2
+     * @param secAns3
+     * @return
+     */
+    public boolean registerUser(String fName, String lName, String email, String username, String password, String secAns1, String secAns2, String secAns3){
+        return registerUser(fName, lName, email, username, password, 0, 0, secAns1, secAns2, secAns3);
+    }
+
+    /**
+     * Registration with balance and isAdmin, but excluding security questions
+     * @param fName
+     * @param lName
+     * @param email
+     * @param username
+     * @param password
+     * @param isAdmin
+     * @return
+     */
     public boolean registerUser(String fName, String lName, String email, String username, String password, String isAdmin) {
         double balance = 300;
         int isAdminInt = Integer.parseInt(isAdmin);
-        return registerUser(fName, lName, email, username, password, balance, isAdminInt);
+        return registerUser(fName, lName, email, username, password, balance, isAdminInt, "", "", "");
     }
 
     public boolean deleteUserById(String id) {

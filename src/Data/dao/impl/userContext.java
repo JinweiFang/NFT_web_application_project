@@ -107,7 +107,7 @@ public class userContext extends abstractConnect implements userDao {
 
     @Override
     public User save(User item) {
-        String sql = "INSERT INTO users(fname, lname, email, username, password) VALUES(?,?,?,?,?)";
+        String sql = "INSERT INTO users(fname, lname, email, username, password, balance, isAdmin, securityAns1, securityAns2, securityAns3) VALUES(?,?,?,?,?,?,?,?,?,?)";
         boolean success = false;
 
         try {
@@ -117,9 +117,11 @@ public class userContext extends abstractConnect implements userDao {
             pstmt.setString(3, item.getEmail());
             pstmt.setString(4, item.getUsername());
             pstmt.setString(5, item.getPassword());
-            pstmt.setString(6, item.getSecAns1());
-            pstmt.setString(7, item.getSecAns2());
-            pstmt.setString(8, item.getSecAns3());
+            pstmt.setDouble(6, item.getBalance());
+            pstmt.setInt(7, item.getIsAdmin());
+            pstmt.setString(8, item.getSecAns1());
+            pstmt.setString(9, item.getSecAns2());
+            pstmt.setString(10, item.getSecAns3());
 
             if (pstmt.executeUpdate() == 0) throw new SQLException("Insertion failed! no rows affected.");
 
@@ -214,7 +216,6 @@ public class userContext extends abstractConnect implements userDao {
         }
 
         return (success) ? item : null;
-        return null;
     }
 
 
@@ -237,6 +238,8 @@ public class userContext extends abstractConnect implements userDao {
             if (res.next()) {
                 return res.getString(1);
             }
+
+            pstm.close();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
