@@ -65,7 +65,8 @@ public class profileServlet extends HttpServlet {
             String lName = req.getParameter("lName");
             int id = response.getId();
 
-            if (userService.updatePersonalInfo(fName, lName, email, username, id)) {
+            if (userService.updatePersonalInfo(response, fName, lName, email, username, id)) {
+                //update this user's info
                 resp.sendRedirect(req.getContextPath() + "/profile");
                 return;
             }

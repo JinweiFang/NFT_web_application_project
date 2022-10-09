@@ -116,18 +116,23 @@ public class UserService {
         return false;
     }
 
-    public boolean updatePersonalInfo(String fName, String lName, String email, String username, int id) {
+    public boolean updatePersonalInfo(User usr, String fName, String lName, String email, String username, int id) {
         // Sanitize input
         if (!fName.isBlank() && !lName.isBlank() && !email.isBlank() && !username.isBlank()) {
             // Sanitize input sure the input is proper
-            User usr = new User();
-            usr.setUsername(username);
-            usr.setEmail(email);
-            usr.setfName(fName);
-            usr.setlName(lName);
-            usr.setId(id);
+            User tempUser = new User();
+            tempUser.setUsername(username);
+            tempUser.setEmail(email);
+            tempUser.setfName(fName);
+            tempUser.setlName(lName);
+            tempUser.setId(id);
 
-            return userRepo.updatePersonalInfo(usr) != null;
+            if(userRepo.updatePersonalInfo(tempUser) != null) {
+                //if the database successfully updates the record then we update this object
+                //another solution is to make the getters check the database instead
+                usr = tempUser;
+                return true;
+            }
         }
         return false;
     }

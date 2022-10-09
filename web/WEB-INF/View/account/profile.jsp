@@ -8,73 +8,133 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ include file="../../Templates/Header.jsp" %>
 <main class="container-fluid">
-    <div>
-        <form action="/profile/changePersonalInfo" method="post">
-            <fieldset>
-                <div>
-                    <label for="fName">First Name : </label>
-                    <input type=text name="fName" class="form-control" id="fName"
-                           value="<%= currentUser.getfName()%>"><br>
+    <div class="col-lg-12 col-md-8 col-12">
+        <!-- Card -->
+        <div class="card">
+            <!-- Card header -->
+            <div class="card-header">
+                <h3 class="mb-0">My Account</h3>
+            </div>
+            <!-- Welcome Message -->
+            <div class="d-lg-flex align-items-center justify-content-between">
+                <hr class="my-5" />
+                <div class="d-flex align-items-center mb-4 mb-lg-0">
+                    <img src="./testiamge.jpg" id="img-uploaded"
+                         class="avatar-xl rounded-circle" alt="" />
+                    <div class="ms-3">
+                        <h4 class="mb-0">Your avatar</h4>
+                        <p class="mb-0">
+                            PNG or JPG no bigger than 800px wide and tall.
+                        </p>
+                    </div>
                 </div>
                 <div>
-                    <label for="lName">Last Name : </label>
-                    <input type=text name="lName" class="form-control" id="lName"
-                           value="<%= currentUser.getlName()%>"><br>
+                    <a href="#" class="btn btn-outline-white btn-sm">Update</a>
+                    <a href="#" class="btn btn-outline-danger btn-sm">Delete</a>
                 </div>
-                <div>
-                    <label for="username">Username : </label>
-                    <input type=text name="username" class="form-control" id="username"
-                           value="<%= currentUser.getUsername()%>"><br>
-                </div>
-                <div>
-                    <label for="email">Email : </label>
-                    <input type=text name = "email" class="form-control" id="email"
-                           value="<%= currentUser.getEmail()%>"><br>
-                </div>
-                <div>
-                    <input type="hidden" name="passwordValidate" class="form-control" id="passwordValidate"
-                           value="<%= currentUser.getPassword()%>" required>
-                </div>
-                <div>
-                    <input type="hidden" name="usernameValidate" class="form-control" id="usernameValidate"
-                           value="<%= currentUser.getUsername()%>" required>
-                </div>
-                <button type="submit" class="btn btn-primary">Submit</button>
-            </fieldset>
-        </form>
-    </div>
-</main>
+            </div>
 
-<main class="container-fluid">
-    <div>
-        <% if (request.getParameterMap().containsKey("errmsg") && request.getParameter("errmsg").equals("2")) { %>
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            Wrong password!
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            <!-- Personal Information -->
+            <div class="card-body">
+                <hr class="my-3" />
+                <div>
+                    <h4 class="mb-0">Personal Details</h4>
+                    <p class="mb-5">
+                        Edit your personal information and address.
+                    </p>
+                    <!-- Form -->
+                    <form action="/profile/changePersonalInfo" method="post">
+                        <fieldset>
+                            <!-- First name -->
+                            <div class="mb-3 col-12 col-md-6">
+                                <label class="form-label" for="fname">First Name</label>
+                                <input type=text name="fName" class="form-control" id="fName"
+                                       value="<%= currentUser.getfName()%>"
+                                       required />
+                            </div>
+                            <!-- Last name -->
+                            <div class="mb-3 col-12 col-md-6">
+                                <label class="form-label" for="lname">Last Name</label>
+                                <input type=text name="lName" class="form-control" id="lName"
+                                       value="<%= currentUser.getlName()%>"
+                                       required />
+                            </div>
+                            <!-- Username -->
+                            <div class="mb-3 col-12 col-md-6">
+                                <label class="form-label" for="username">Username</label>
+                                <input type=text name="username" class="form-control" id="username"
+                                       value="<%= currentUser.getUsername()%>"
+                                       required />
+                            </div>
+                            <!-- Email -->
+                            <div class="mb-3 col-12 col-md-6">
+                                <label class="form-label" for="email">Email</label>
+                                <input type=text name = "email" class="form-control" id="email"
+                                       value="<%= currentUser.getEmail()%>" required />
+                            </div>
+                            <div>
+                                <input type="hidden" name="passwordValidate" class="form-control" id="passwordValidate"
+                                       value="<%= currentUser.getPassword()%>" required>
+                            </div>
+                            <div>
+                                <input type="hidden" name="usernameValidate" class="form-control" id="usernameValidate"
+                                       value="<%= currentUser.getUsername()%>" required>
+                            </div>
+                            <div class="col-12">
+                                <!-- Button -->
+                                <button class="btn btn-primary" type="submit">Update Profile</button>
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Password Change -->
+            <div class="card-body">
+                <hr class="my-3" />
+                <div>
+                    <h4 class="mb-0">Security</h4>
+                    <p class="mb-4">
+                        Edit your password.
+                    </p>
+                    <%--error message--%>
+                    <% if (request.getParameterMap().containsKey("errmsg") && request.getParameter("errmsg").equals("2")) { %>
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        Wrong password!
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    <% } %>
+                    <!-- Form -->
+                    <form action="/profile/changePassword" method="post">
+                        <fieldset>
+                            <%--username for login check--%>
+                            <div class="mb-3 col-12 col-md-6">
+                                <input type="hidden" name="username" class="form-control" id="usernameCheck"
+                                       value="<%=currentUser.getUsername()%>"><br>
+                            </div>
+
+                            <%--old password--%>
+                            <div class="mb-3 col-12 col-md-6">
+                                <label class="form-label" for="oldPassword">Old Password</label>
+                                <input type="password" name="oldPassword" class="form-control" id="oldPassword"
+                                       placeholder="Password"
+                                       required/>
+                            </div>
+                            <div class="mb-3 col-12 col-md-6">
+                                <label class="form-label" for="newPassword">New Password</label>
+                                <input type="password" name="newPassword" class="form-control" id="newPassword"
+                                       placeholder="Password"
+                                       required/>
+                            </div>
+                            <div class="col-12">
+                                <!-- Button -->
+                                <button class="btn btn-primary" type="submit">Update Password</button>
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
         </div>
-        <% } %>
-
-        <form action="/profile/changePassword" method="post">
-            <fieldset>
-                <div>
-                    <input type="hidden" name="username" class="form-control" id="usernameCheck"
-                           value="<%= currentUser.getUsername()%>" required>
-                </div>
-                <div>
-                    <label for="oldPassword">Old Password : </label>
-                    <input type="password" name="oldPassword" class="form-control" id="oldPassword"
-                           placeholder="Password"
-                           required>
-                </div>
-                <div>
-                    <label for="newPassword">New Password : </label>
-                    <input type="password" name="newPassword" class="form-control" id="newPassword"
-                           placeholder="Password"
-                           required>
-                </div>
-                <button type="submit" class="btn btn-primary">Submit</button>
-            </fieldset>
-        </form>
     </div>
 </main>
 <%@ include file="../../Templates/Footer.jsp" %>
