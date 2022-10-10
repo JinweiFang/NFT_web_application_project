@@ -94,6 +94,8 @@ public class authenticateServlet extends HttpServlet {
                 resp.sendRedirect(req.getContextPath() + "/account/reset.jsp?succmsg=1");
                 System.out.println("http://localhost:8080/account/new-password.jsp?uname="+tknResponse.getUsername()+"&token="+tknResponse.getTokenValue());
             }
+            
+            return;
         }
 
         // Redirect back to login page if validation failed
