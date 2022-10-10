@@ -27,7 +27,7 @@ public class tokenContext extends abstractConnect implements TokenDao {
         Token result = null;
 
         try {
-            PreparedStatement pstm = conn.prepareStatement(sql);
+            PreparedStatement pstm = getConn().prepareStatement(sql);
             pstm.setString(1, item.getUsername());
             pstm.setString(2, item.getTokenValue());
             ResultSet res = pstm.executeQuery();
@@ -55,7 +55,7 @@ public class tokenContext extends abstractConnect implements TokenDao {
         boolean success = false;
 
         try {
-            PreparedStatement pstmt = conn.prepareStatement(sql);
+            PreparedStatement pstmt = getConn().prepareStatement(sql);
             pstmt.setString(1, item.getUsername());
             pstmt.setString(2, item.getTokenValue());
             pstmt.setInt(3, item.getToken_type());

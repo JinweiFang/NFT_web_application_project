@@ -10,18 +10,18 @@
 
 <main class="container-fluid">
     <div class="container-sm signup-container d-flex flex-row justify-content-center">
-        <form action="/authenticate/signup" method="post" class="login flex-fill">
+        <form action="/authenticate/register" method="post" class="signup flex-fill">
             <fieldset>
                 <legend class="py-2">Sign up</legend>
                 <% if (request.getParameterMap().containsKey("errmsg") && request.getParameter("errmsg").equals("1")) { %>
                 <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    An unexpected error occurred!
+                    An unexpected error occurred while registering!
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
                 <% } %>
                 <% if (request.getParameterMap().containsKey("succsignup") && request.getParameter("succsignup").equals("1")) { %>
                 <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    Successfully signed up! You may now log in with your username and password!
+                    Successfully registered!
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
                 <% } %>

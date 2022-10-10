@@ -11,7 +11,8 @@ main {
     padding: 35px 15px 15px;
 }
 
-form.login {
+form.login,
+form.signup {
     max-width: 450px;
     padding: 15px 25px;
     border-radius: 5px;
@@ -19,10 +20,14 @@ form.login {
     box-shadow: 0px 0px 20px -10px #5a5a5a;
 }
 
-form.login legend {
+form.login legend,
+form.signup legend {
     font-weight: bold;
 }
 
-form.login .form-row {
+form.general .form-row,
+form.login .form-row,
+form.signup .form-row {
     margin: 10px 0;
 }
+
