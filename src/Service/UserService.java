@@ -8,6 +8,8 @@ import Data.dao.impl.userContext;
 import Domain.Token;
 import Domain.User;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 import static Utils.DateUtils.generateUnixTimestamp;
@@ -116,7 +118,7 @@ public class UserService {
         return false;
     }
 
-    public boolean updatePersonalInfo(User usr, String fName, String lName, String email, String username, int id) {
+    public boolean updatePersonalInfo(HttpServletRequest req, String fName, String lName, String email, String username, int id) {
         // Sanitize input
         if (!fName.isBlank() && !lName.isBlank() && !email.isBlank() && !username.isBlank()) {
             // Sanitize input sure the input is proper
@@ -128,9 +130,14 @@ public class UserService {
             tempUser.setId(id);
 
             if(userRepo.updatePersonalInfo(tempUser) != null) {
-                //if the database successfully updates the record then we update this object
-                //another solution is to make the getters check the database instead
-                usr = tempUser;
+                //The database was updated, now we need to update the session to reflect the right info
+                User sessionUser = ((User) req.getSession().getAttribute("user"));
+                sessionUser.setUsername(username);
+                sessionUser.setEmail(email);
+                sessionUser.setfName(fName);
+                sessionUser.setlName(lName);
+                sessionUser.setId(id);
+
                 return true;
             }
         }

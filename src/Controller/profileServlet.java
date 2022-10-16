@@ -65,7 +65,12 @@ public class profileServlet extends HttpServlet {
             String lName = req.getParameter("lName");
             int id = response.getId();
 
-            if (userService.updatePersonalInfo(response, fName, lName, email, username, id)) {
+            HttpSession session = req.getSession(false);
+            if (session == null) {
+                throw new RuntimeException("This user must have a valid session to change personal information.");
+            }
+
+            if (userService.updatePersonalInfo(req, fName, lName, email, username, id)) {
                 //update this user's info
                 resp.sendRedirect(req.getContextPath() + "/profile");
                 return;
