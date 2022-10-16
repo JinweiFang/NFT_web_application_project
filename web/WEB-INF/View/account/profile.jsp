@@ -19,8 +19,9 @@
             <div class="d-lg-flex align-items-center justify-content-between">
                 <hr class="my-5" />
                 <div class="d-flex align-items-center mb-4 mb-lg-0">
-                    <img src="./testiamge.jpg" id="img-uploaded"
-                         class="avatar-xl rounded-circle" alt="" />
+<%--                    for when you feel like doing this--%>
+<%--                    <img src="./assets/avatar/code lines.jpg" id="img-uploaded" height="800px" width="800px"--%>
+<%--                         class="avatar-xl rounded-circle" alt="" />--%>
                     <div class="ms-3">
                         <h4 class="mb-0">Your avatar</h4>
                         <p class="mb-0">
@@ -29,8 +30,8 @@
                     </div>
                 </div>
                 <div>
-                    <a href="#" class="btn btn-outline-white btn-sm">Update</a>
-                    <a href="#" class="btn btn-outline-danger btn-sm">Delete</a>
+                    <a href="#" class="btn btn-outline-white btn-sm px-3 pl-10">Update</a>
+                    <a href="#" class="btn btn-outline-danger btn-sm px-6">Delete</a>
                 </div>
             </div>
 
@@ -42,6 +43,13 @@
                     <p class="mb-5">
                         Edit your personal information and address.
                     </p>
+                    <%--error message : could not update the db --%>
+                    <% if (request.getParameterMap().containsKey("errmsg") && request.getParameter("errmsg").equals("1")) { %>
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        An unexpected error occurred, please try again!
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    <% } %>
                     <!-- Form -->
                     <form action="/profile/changePersonalInfo" method="post">
                         <fieldset>
@@ -97,7 +105,7 @@
                     <p class="mb-4">
                         Edit your password.
                     </p>
-                    <%--error message--%>
+                    <%--error message : wrong password--%>
                     <% if (request.getParameterMap().containsKey("errmsg") && request.getParameter("errmsg").equals("2")) { %>
                     <div class="alert alert-danger alert-dismissible fade show" role="alert">
                         Wrong password!

@@ -1,6 +1,5 @@
 package Controller;
 
-import Domain.Token;
 import Domain.User;
 import Service.UserService;
 
@@ -47,7 +46,7 @@ public class profileServlet extends HttpServlet {
         //check that the oldPassword is correct
         User response = userService.authenticateUser(req.getParameter("username"), req.getParameter("oldPassword"));
 
-        // return error if the old possword confirmation fails or the update fails
+        // return error if the old password confirmation fails or the update fails
         if(response == null || !userService.updateUserPassword(req.getParameter("username"), req.getParameter("newPassword"))) {
             resp.sendRedirect(req.getContextPath() + "/profile?errmsg=2");
         }

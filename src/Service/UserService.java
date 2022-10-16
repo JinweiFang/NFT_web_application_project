@@ -9,7 +9,6 @@ import Domain.Token;
 import Domain.User;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.util.List;
 
 import static Utils.DateUtils.generateUnixTimestamp;
