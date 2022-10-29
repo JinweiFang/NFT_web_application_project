@@ -8,6 +8,7 @@ import Data.dao.impl.userContext;
 import Domain.Token;
 import Domain.User;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static Utils.DateUtils.generateUnixTimestamp;
@@ -124,6 +125,18 @@ public class UserService {
 
         boolean[] correct = {ans1.equals(correctAnswer1), ans2.equals(correctAnswer2), ans3.equals(correctAnswer3)};
         return correct;
+    }
+
+    public double getUserBalance(String username) {
+        return userRepo.queryUserBalance(username); // returns null if user is not found
+    }
+
+    public boolean updateUserBalance(String username, double newBalance) {
+        // Sanitize input sure the input is proper
+        if (!username.isBlank()) {
+            return userRepo.updateUserBalance(username, newBalance);
+        }
+        return false;
     }
 
 }

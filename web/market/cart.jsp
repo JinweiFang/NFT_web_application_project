@@ -16,6 +16,18 @@
         <form action="/transaction/cart" method="post" class="login flex-fill">
             <fieldset>
                 <legend class="py-2">Cart</legend>
+                <% if (request.getParameterMap().containsKey("errmsg") && request.getParameter("errmsg").equals("1")) { %>
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    Transaction failed.
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                <% } %>
+                <% if (request.getParameterMap().containsKey("succmsg") && request.getParameter("succmsg").equals("1")) { %>
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    Transaction successful!
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                <% } %>
                 <% if (cart != null) {
                     for(int i = 0; i < cart.size(); i++){
                 %>

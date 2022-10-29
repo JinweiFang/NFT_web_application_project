@@ -1,6 +1,7 @@
 package Controller;
 
 import Domain.User;
+import Service.NftService;
 import Service.UserService;
 
 import javax.servlet.RequestDispatcher;
@@ -18,10 +19,12 @@ import javax.servlet.http.HttpSession;
 public class transactionServlet extends HttpServlet {
 
     private UserService userService;
+    private NftService nftService;
 
     @Override
     public void init() {
         this.userService = new UserService();
+        this.nftService = new NftService();
     }
 
     @Override
@@ -53,9 +56,18 @@ public class transactionServlet extends HttpServlet {
         String button = req.getParameter("remove-button");
         if(button != null){
             removeCartItem(req.getSession(true), Integer.parseInt(button));
+            resp.sendRedirect(req.getContextPath() + "/market/cart.jsp");
+            return;
         }
+        HttpSession s = req.getSession(true);
 
-        resp.sendRedirect(req.getContextPath() + "/market/cart.jsp");
+        boolean success = attemptTransaction((User) s.getAttribute("user"), (ArrayList<Integer>) s.getAttribute("cart"));
+        if(success){
+            clearCart(s);
+            resp.sendRedirect(req.getContextPath() + "/market/cart.jsp?succmsg=1");
+            return;
+        }
+        resp.sendRedirect(req.getContextPath() + "/market/cart.jsp?errmsg=1");
         return;
     }
 
@@ -63,5 +75,32 @@ public class transactionServlet extends HttpServlet {
         ArrayList<Integer> cart = (ArrayList<Integer>) session.getAttribute("cart");
         cart.remove(itemIndex);
         session.setAttribute("cart", cart);
+    }
+
+    private void clearCart(HttpSession session){
+        session.setAttribute("cart", new ArrayList<Integer>());
+    }
+
+    private double sumCartPrices(ArrayList<Integer> cart){
+        double total = 0;
+        for (Integer id : cart){
+            double price = nftService.getNftPrice(id);
+            if(price == -1)
+                return -1;
+            total += price;
+        }
+        return total;
+    }
+
+    private boolean attemptTransaction(User user, ArrayList<Integer> cart){
+        String username = user.getUsername();
+        double balance = userService.getUserBalance(username);
+        double cartTotal = sumCartPrices(cart);
+        if(cartTotal == -1)
+            return false;
+        if(balance >= cartTotal)
+            return userService.updateUserBalance(user.getUsername(), balance - cartTotal);
+        else
+            return false;
     }
 }

@@ -195,4 +195,44 @@ public class userContext extends abstractConnect implements userDao {
 
         return null;
     }
+
+    @Override
+    public Double queryUserBalance(String username){
+        String sql = "SELECT balance FROM users WHERE username = ?";
+
+        try {
+            PreparedStatement pstm = conn.prepareStatement(sql);
+            pstm.setString(1, username);
+            ResultSet res = pstm.executeQuery();
+
+            if (res.next()) {
+                return res.getDouble(1);
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return null;
+    }
+
+    public boolean updateUserBalance(String username, double newBalance){
+        String sql = "UPDATE users SET balance = ? WHERE username = ?";
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setDouble(1, newBalance);
+            pstmt.setString(2, username);
+
+            if (pstmt.executeUpdate() == 0) throw new SQLException("Update failed! no rows affected.");
+
+            try (ResultSet generatedKeys = pstmt.getGeneratedKeys()) {
+                if (generatedKeys.next())
+                    return true;
+                else
+                    throw new SQLException("Update failed! no rows affected.");
+            }
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return false;
+    }
 }
