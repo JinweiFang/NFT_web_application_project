@@ -13,7 +13,8 @@ import java.io.IOException;
 
 public class profileServlet extends HttpServlet {
     private UserService userService;
-
+    private static String HOST = "http://localhost:8080/";
+    private static String AUTHENTICATE = "authenticate";
     @Override
     public void init() {
         this.userService = new UserService();
@@ -38,6 +39,10 @@ public class profileServlet extends HttpServlet {
 
             else if (urls[0].equals("changePersonalInfo")) {
                 personalInformationChange(req, resp);
+            }
+
+            else if (urls[0].equals("deleteAccount")) {
+                deleteAccount(req, resp);
             }
         }
     }
@@ -76,5 +81,21 @@ public class profileServlet extends HttpServlet {
             }
         }
         resp.sendRedirect(req.getContextPath() + "/profile?errmsg=1");
+    }
+
+    private void deleteAccount(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        // Handle unauthorized access (must be admin)
+        User response = userService.authenticateUser(req.getParameter("usernameDelete"), req.getParameter("passwordDelete"));
+
+        if (response != null) {
+            boolean deletionSuccess = userService.deleteUserById(String.valueOf(response.getId()));
+
+            if (deletionSuccess) {
+                resp.sendRedirect(HOST+AUTHENTICATE+"?logout=1");
+                return;
+            }
+            // Redirect back to account list if registration failed
+            resp.sendRedirect(req.getContextPath() + "/profile?errmsg=1");
+        }
     }
 }

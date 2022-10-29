@@ -142,4 +142,15 @@ public class UserService {
         }
         return false;
     }
+
+    public boolean deleteUserById(String id) {
+        // Sanitize input
+        if(!id.isBlank()) {
+            User usr = new User();
+            usr.setId(Integer.parseInt(id));
+            return userRepo.delete(usr) != null;
+        }
+
+        return false;
+    }
 }

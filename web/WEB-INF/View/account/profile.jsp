@@ -9,6 +9,28 @@
 <%@ include file="../../Templates/Header.jsp" %>
 <main class="container-fluid">
     <div class="col-lg-12 col-md-8 col-12">
+        <!-- Error -->
+        <div class="col-lg-12 col-md-8 col-12">
+            <div class="card">
+                <%--error message : could not update the db --%>
+                <% if (request.getParameterMap().containsKey("errmsg")) { %>
+                <%if(request.getParameter("errmsg").equals("1")) { %>
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    An unexpected error occurred, please try again!
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                <% }%>
+
+                <%if(request.getParameter("errmsg").equals("2")) { %>
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    Wrong Password!
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                <% }%>
+                <% } %>
+            </div>
+        </div>
+
         <!-- Card -->
         <div class="card">
             <!-- Card header -->
@@ -43,13 +65,6 @@
                     <p class="mb-5">
                         Edit your personal information and address.
                     </p>
-                    <%--error message : could not update the db --%>
-                    <% if (request.getParameterMap().containsKey("errmsg") && request.getParameter("errmsg").equals("1")) { %>
-                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                        An unexpected error occurred, please try again!
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-                    <% } %>
                     <!-- Form -->
                     <form action="/profile/changePersonalInfo" method="post">
                         <fieldset>
@@ -105,13 +120,6 @@
                     <p class="mb-4">
                         Edit your password.
                     </p>
-                    <%--error message : wrong password--%>
-                    <% if (request.getParameterMap().containsKey("errmsg") && request.getParameter("errmsg").equals("2")) { %>
-                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                        Wrong password!
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-                    <% } %>
                     <!-- Form -->
                     <form action="/profile/changePassword" method="post">
                         <fieldset>
@@ -142,6 +150,41 @@
                     </form>
                 </div>
             </div>
+
+            <!-- delete account -->
+            <div class="card-body">
+                <hr class="my-3" />
+                <div>
+                    <h4 class="mb-0">Delete</h4>
+                    <p class="mb-4">
+                        Delete your account permanently.
+                    </p>
+                    <%--error message : wrong password--%>
+                    <% if (request.getParameterMap().containsKey("errmsg") && request.getParameter("errmsg").equals("3")) { %>
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        Unexpected Error Occurred!
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    <% } %>
+                    <!-- Form -->
+                    <form action="/profile/deleteAccount" method="post">
+                        <fieldset>
+                            <!--authenticate-->
+                            <div>
+                                <input type="hidden" name="usernameDelete" class="form-control" id="usernameDelete"
+                                       value="<%= currentUser.getUsername()%>" required>
+                                <input type="hidden" name="passwordDelete" class="form-control" id="passwordDelete"
+                                       value="<%= currentUser.getPassword()%>" required>
+                            </div>
+                            <div class="col-12">
+                                <!-- Button -->
+                                <button class="btn btn-danger" type="submit">Delete</button>
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+
         </div>
     </div>
 </main>

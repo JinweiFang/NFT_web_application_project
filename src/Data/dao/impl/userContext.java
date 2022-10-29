@@ -158,7 +158,23 @@ public class userContext extends abstractConnect implements userDao {
 
     @Override
     public User delete(User item) {
-        return null;
+        String sql = "DELETE FROM users WHERE id = ?";
+        boolean success = false;
+
+        try {
+            PreparedStatement pstmt = getConn().prepareStatement(sql);
+            pstmt.setInt(1, item.getId());
+
+            if (pstmt.executeUpdate() == 0) throw new SQLException("Delete failed! no rows affected.");
+
+            pstmt.close();
+
+            success = true;
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        return (success) ? item : null;
     }
 
     @Override
