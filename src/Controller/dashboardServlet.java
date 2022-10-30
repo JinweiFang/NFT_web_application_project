@@ -24,7 +24,6 @@ public class dashboardServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-
         // Handle unauthorized access
         HttpSession session = req.getSession(false);
         if(session == null || session.getAttribute("user") == null) {
@@ -42,14 +41,6 @@ public class dashboardServlet extends HttpServlet {
 
             String msg = "Sorry, admin account is needed to access this page!";
             if(!loggedUser.isAdmin()) dispatchToJSP(req, resp, "/WEB-INF/View/display-message.jsp?msg=" + msg);
-
-            // Route -> /dashboard/account-list
-            if(urls[0].equals("account-list")) {
-                List<User> users = userService.getAllUsers();
-
-                req.setAttribute("users", users);
-                dispatchToJSP(req, resp, "/WEB-INF/View/account/account-list.jsp");
-            }
         }
 
         // Pass the request onto jsp page

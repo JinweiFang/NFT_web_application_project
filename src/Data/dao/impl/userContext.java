@@ -23,7 +23,7 @@ public class userContext extends abstractConnect implements userDao {
         String sql = "SELECT id, fname, lname, email, username, balance, isAdmin FROM users";
         List<User> result = new ArrayList<>();
 
-        try (PreparedStatement pstm = conn.prepareStatement(sql)) {
+        try (PreparedStatement pstm = getConn().prepareStatement(sql)) {
             ResultSet res = pstm.executeQuery();
 
             while (res.next()) {
@@ -37,6 +37,7 @@ public class userContext extends abstractConnect implements userDao {
                 usr.setIsAdmin(res.getInt(7));
                 result.add(usr);
             }
+
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -49,7 +50,7 @@ public class userContext extends abstractConnect implements userDao {
         String sql = "SELECT id, fname, lname, email, username, password, balance, isAdmin FROM users WHERE username = ? AND password = ? ";
         User result = null;
 
-        try (PreparedStatement pstm = conn.prepareStatement(sql)) {
+        try (PreparedStatement pstm = getConn().prepareStatement(sql)) {
             pstm.setString(1, item.getUsername());
             pstm.setString(2, item.getPassword());
             ResultSet res = pstm.executeQuery();
@@ -78,7 +79,7 @@ public class userContext extends abstractConnect implements userDao {
         String sql = "SELECT id, email, username FROM users WHERE username = ?";
         User result = null;
 
-        try (PreparedStatement pstm = conn.prepareStatement(sql)) {
+        try (PreparedStatement pstm = getConn().prepareStatement(sql)) {
             pstm.setString(1, item.getUsername());
             ResultSet res = pstm.executeQuery();
 
@@ -89,6 +90,7 @@ public class userContext extends abstractConnect implements userDao {
                 usr.setUsername(res.getString(3));
                 result = usr;
             }
+
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -98,25 +100,29 @@ public class userContext extends abstractConnect implements userDao {
 
     @Override
     public User save(User item) {
-        String sql = "INSERT INTO users(fname, lname, email, username, password) VALUES(?,?,?,?,?)";
+        String sql = "INSERT INTO users(fname, lname, email, username, password, balance, isAdmin, securityAns1, securityAns2, securityAns3) VALUES(?,?,?,?,?,?,?,?,?,?)";
         boolean success = false;
 
-        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setString(1, item.getfName());
-            pstmt.setString(2, item.getlName());
-            pstmt.setString(3, item.getEmail());
-            pstmt.setString(4, item.getUsername());
-            pstmt.setString(5, item.getPassword());
+        try (PreparedStatement pstm = getConn().prepareStatement(sql)) {
+            pstm.setString(1, item.getfName());
+            pstm.setString(2, item.getlName());
+            pstm.setString(3, item.getEmail());
+            pstm.setString(4, item.getUsername());
+            pstm.setString(5, item.getPassword());
+            pstm.setDouble(6, item.getBalance());
+            pstm.setInt(7, item.getIsAdmin());
+            pstm.setString(8, item.getSecAns1());
+            pstm.setString(9, item.getSecAns2());
+            pstm.setString(10, item.getSecAns3());
 
-            if (pstmt.executeUpdate() == 0) throw new SQLException("Insertion failed! no rows affected.");
+            if (pstm.executeUpdate() == 0) throw new SQLException("Insertion failed! no rows affected.");
 
-            try (ResultSet generatedKeys = pstmt.getGeneratedKeys()) {
+            try (ResultSet generatedKeys = pstm.getGeneratedKeys()) {
                 if (generatedKeys.next())
                     item.setId(generatedKeys.getInt(1));
                 else
                     throw new SQLException("Insertion failed! no rows affected.");
             }
-
             success = true;
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -127,7 +133,25 @@ public class userContext extends abstractConnect implements userDao {
 
     @Override
     public User update(User item) {
-        return null;
+        String sql = "UPDATE users SET fname=?, lname=?, email=?, isadmin=?, username=? WHERE id=?";
+        boolean success = false;
+
+        try (PreparedStatement pstm = getConn().prepareStatement(sql)) {
+            pstm.setString(1, item.getfName());
+            pstm.setString(2, item.getlName());
+            pstm.setString(3, item.getEmail());
+            pstm.setInt(4, item.getIsAdmin());
+            pstm.setString(5, item.getUsername());
+            pstm.setInt(6, item.getId());
+
+            if (pstm.executeUpdate() == 0) throw new SQLException("Update failed! no rows affected.");
+
+            success = true;
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        return success ? item : null;
     }
 
     @Override
@@ -135,13 +159,13 @@ public class userContext extends abstractConnect implements userDao {
         String sql = "UPDATE users SET password = ? WHERE username = ?";
         boolean success = false;
 
-        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setString(1, item.getPassword());
-            pstmt.setString(2, item.getUsername());
+        try (PreparedStatement pstm = getConn().prepareStatement(sql)) {
+            pstm.setString(1, item.getPassword());
+            pstm.setString(2, item.getUsername());
 
-            if (pstmt.executeUpdate() == 0) throw new SQLException("Update failed! no rows affected.");
+            if (pstm.executeUpdate() == 0) throw new SQLException("Update failed! no rows affected.");
 
-            try (ResultSet generatedKeys = pstmt.getGeneratedKeys()) {
+            try (ResultSet generatedKeys = pstm.getGeneratedKeys()) {
                 if (generatedKeys.next())
                     item.setId(generatedKeys.getInt(1));
                 else
@@ -161,13 +185,11 @@ public class userContext extends abstractConnect implements userDao {
         String sql = "DELETE FROM users WHERE id = ?";
         boolean success = false;
 
-        try {
-            PreparedStatement pstmt = getConn().prepareStatement(sql);
-            pstmt.setInt(1, item.getId());
+        try (PreparedStatement pstm = getConn().prepareStatement(sql)) {
+            pstm.setInt(1, item.getId());
 
-            if (pstmt.executeUpdate() == 0) throw new SQLException("Delete failed! no rows affected.");
+            if (pstm.executeUpdate() == 0) throw new SQLException("Delete failed! no rows affected.");
 
-            pstmt.close();
 
             success = true;
         } catch (SQLException e) {
@@ -182,16 +204,16 @@ public class userContext extends abstractConnect implements userDao {
         String sql = "UPDATE users SET fname = ?, lname = ?, username = ?, email = ? WHERE id = ?";
         boolean success = false;
 
-        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setString(1, item.getfName());
-            pstmt.setString(2, item.getlName());
-            pstmt.setString(3, item.getUsername());
-            pstmt.setString(4, item.getEmail());
-            pstmt.setString(5, String.valueOf(item.getId()));
+        try (PreparedStatement pstm = getConn().prepareStatement(sql)) {
+            pstm.setString(1, item.getfName());
+            pstm.setString(2, item.getlName());
+            pstm.setString(3, item.getUsername());
+            pstm.setString(4, item.getEmail());
+            pstm.setString(5, String.valueOf(item.getId()));
 
-            if (pstmt.executeUpdate() == 0) throw new SQLException("Update failed! no rows affected.");
+            if (pstm.executeUpdate() == 0) throw new SQLException("Update failed! no rows affected.");
 
-            try (ResultSet generatedKeys = pstmt.getGeneratedKeys()) {
+            try (ResultSet generatedKeys = pstm.getGeneratedKeys()) {
                 if (generatedKeys.next())
                     item.setId(generatedKeys.getInt(1));
                 else
@@ -204,5 +226,31 @@ public class userContext extends abstractConnect implements userDao {
         }
 
         return success ? item : null;
+    }
+
+    @Override
+    public String getSecurityAnswer(String username, int status) {
+
+        String target = null;
+        if(status == 0) target = "securityAns1";
+        else if(status == 1) target = "securityAns2";
+        else if(status == 2) target = "securityAns3";
+        else return null;
+
+        String sql = "SELECT " + target + " FROM users WHERE username = ?";
+
+        try (PreparedStatement pstm = getConn().prepareStatement(sql)){
+            pstm.setString(1, username);
+            ResultSet res = pstm.executeQuery();
+
+            if (res.next()) {
+                return res.getString(1);
+            }
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        return null;
     }
 }

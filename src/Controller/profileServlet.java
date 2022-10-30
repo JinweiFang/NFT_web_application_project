@@ -14,11 +14,10 @@ import java.io.IOException;
 public class profileServlet extends HttpServlet {
     private UserService userService;
     private static String HOST = "http://localhost:8080/";
-    private static String AUTHENTICATE = "authenticate";
+    private static String AUTHENTICATE = "authenticateServlet";
+
     @Override
-    public void init() {
-        this.userService = new UserService();
-    }
+    public void init() {this.userService = new UserService();}
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         RequestDispatcher dispatcher = req.getRequestDispatcher(req.getContextPath() + "WEB-INF/View/account/profile.jsp");
@@ -56,7 +55,7 @@ public class profileServlet extends HttpServlet {
             resp.sendRedirect(req.getContextPath() + "/profile?errmsg=2");
         }
         else {
-            resp.sendRedirect("/profile");
+            resp.sendRedirect("/profile?errmsg=4");
         }
     }
     private void personalInformationChange(HttpServletRequest req, HttpServletResponse resp) throws IOException {
@@ -76,25 +75,28 @@ public class profileServlet extends HttpServlet {
 
             if (userService.updatePersonalInfo(req, fName, lName, email, username, id)) {
                 //update this user's info
-                resp.sendRedirect(req.getContextPath() + "/profile");
+                resp.sendRedirect(req.getContextPath() + "/profile?errmsg=3");
                 return;
             }
         }
         resp.sendRedirect(req.getContextPath() + "/profile?errmsg=1");
     }
 
-    private void deleteAccount(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    private void deleteAccount(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         // Handle unauthorized access (must be admin)
         User response = userService.authenticateUser(req.getParameter("usernameDelete"), req.getParameter("passwordDelete"));
 
         if (response != null) {
             boolean deletionSuccess = userService.deleteUserById(String.valueOf(response.getId()));
-
             if (deletionSuccess) {
-                resp.sendRedirect(HOST+AUTHENTICATE+"?logout=1");
+                HttpSession session = req.getSession(false);
+                session.invalidate();
+
+                RequestDispatcher dispatcher = req.getRequestDispatcher(req.getContextPath() + "web/WEB-INF/View/dashboard.jsp");
+                dispatcher.forward(req, resp);
                 return;
             }
-            // Redirect back to account list if registration failed
+
             resp.sendRedirect(req.getContextPath() + "/profile?errmsg=1");
         }
     }

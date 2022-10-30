@@ -11,7 +11,7 @@
     <div class="col-lg-12 col-md-8 col-12">
         <!-- Error -->
         <div class="col-lg-12 col-md-8 col-12">
-            <div class="card">
+            <div class="alert-danger">
                 <%--error message : could not update the db --%>
                 <% if (request.getParameterMap().containsKey("errmsg")) { %>
                 <%if(request.getParameter("errmsg").equals("1")) { %>
@@ -31,6 +31,27 @@
             </div>
         </div>
 
+        <!-- Success -->
+        <div class="col-lg-12 col-md-8 col-12">
+            <div class="alert-success">
+                <%--error message : could not update the db --%>
+                <% if (request.getParameterMap().containsKey("errmsg")) { %>
+                <%if(request.getParameter("errmsg").equals("3")) { %>
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    Personal Information Changed!
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                <% }%>
+
+                <%if(request.getParameter("errmsg").equals("4")) { %>
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    Password Changed!
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                <% }%>
+                <% } %>
+            </div>
+        </div>
         <!-- Card -->
         <div class="card">
             <!-- Card header -->
@@ -159,13 +180,6 @@
                     <p class="mb-4">
                         Delete your account permanently.
                     </p>
-                    <%--error message : wrong password--%>
-                    <% if (request.getParameterMap().containsKey("errmsg") && request.getParameter("errmsg").equals("3")) { %>
-                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                        Unexpected Error Occurred!
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-                    <% } %>
                     <!-- Form -->
                     <form action="/profile/deleteAccount" method="post">
                         <fieldset>
