@@ -40,12 +40,8 @@
                     <% if (currentUser.isAdmin()) {%>
                     <li><a class="dropdown-item" href="${pageContext.request.contextPath}/admin/account-list">Account List</a></li>
                     <% } %>
-<<<<<<< HEAD
-                    <li><a class="dropdown-item" href="${pageContext.request.contextPath}/user/@<%=currentUser.getUsername()%>">Profile</a></li>
-=======
                     <li><a class="dropdown-item" href="${pageContext.request.contextPath}/profile">Profile</a></li>
 <%--                    <li><a class="dropdown-item" href="${pageContext.request.contextPath}/user/@<%=currentUser.getUsername()%>">Profile</a></li>--%>
->>>>>>> myAccountKevin
                     <li><a class="dropdown-item" href="#">Settings</a></li>
                     <li><hr class="dropdown-divider"></li>
                     <li><a class="dropdown-item" href="${pageContext.request.contextPath}/authenticate/logout">Log Out</a></li>
