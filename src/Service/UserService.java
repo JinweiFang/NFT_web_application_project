@@ -8,6 +8,7 @@ import Data.dao.impl.userContext;
 import Domain.Token;
 import Domain.User;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 import static Utils.DateUtils.generateUnixTimestamp;
@@ -155,7 +156,11 @@ public class UserService {
      * @param password
      * @return
      */
+<<<<<<< HEAD
     public boolean registerUser(String fName, String lName, String email, String username, String password){
+=======
+    public boolean registerUser (String fName, String lName, String email, String username, String password){
+>>>>>>> myAccountKevin
         return registerUser(fName, lName, email, username, password, 0, 0, "", "", "");
     }
 
@@ -171,7 +176,12 @@ public class UserService {
      * @param secAns3
      * @return
      */
+<<<<<<< HEAD
     public boolean registerUser(String fName, String lName, String email, String username, String password, String secAns1, String secAns2, String secAns3){
+=======
+    public boolean registerUser (String fName, String lName, String email, String username, String password, String
+            secAns1, String secAns2, String secAns3){
+>>>>>>> myAccountKevin
         return registerUser(fName, lName, email, username, password, 0, 0, secAns1, secAns2, secAns3);
     }
 
@@ -185,12 +195,18 @@ public class UserService {
      * @param isAdmin
      * @return
      */
+<<<<<<< HEAD
     public boolean registerUser(String fName, String lName, String email, String username, String password, String isAdmin) {
+=======
+    public boolean registerUser (String fName, String lName, String email, String username, String password, String
+            isAdmin){
+>>>>>>> myAccountKevin
         double balance = 300;
         int isAdminInt = Integer.parseInt(isAdmin);
         return registerUser(fName, lName, email, username, password, balance, isAdminInt, "", "", "");
     }
 
+<<<<<<< HEAD
     public boolean deleteUserById(String id) {
         // Sanitize input
         if(!id.isBlank()) {
@@ -203,6 +219,10 @@ public class UserService {
     }
 
     public boolean updateUserById(String id, String fName, String lName, String email, String username, String password, String isAdmin) {
+=======
+    public boolean updateUserById (String id, String fName, String lName, String email, String username, String
+            password, String isAdmin){
+>>>>>>> myAccountKevin
         // Sanitize input
         if (!id.isBlank() && !fName.isBlank() && !lName.isBlank() && !email.isBlank() && !username.isBlank() && !isAdmin.isBlank()) {
             User usr = new User();
@@ -215,7 +235,11 @@ public class UserService {
             usr = userRepo.update(usr); // if unsuccessful returns null
 
             // !password may not always be updated
+<<<<<<< HEAD
             if(!password.isBlank() && usr != null) return updateUserPassword(usr.getUsername(), password);
+=======
+            if (!password.isBlank() && usr != null) return updateUserPassword(usr.getUsername(), password);
+>>>>>>> myAccountKevin
 
             return usr != null;
         }
@@ -223,7 +247,40 @@ public class UserService {
         return false;
     }
 
+<<<<<<< HEAD
     public boolean[] checkSecurityAnswers(String username, String ans1, String ans2, String ans3){
+=======
+    public boolean updatePersonalInfo(int id, String fName, String lName, String email, String username) {
+        // Sanitize input
+        if (!fName.isBlank() && !lName.isBlank() && !email.isBlank() && !username.isBlank()) {
+            // Sanitize input sure the input is proper
+            User tempUser = new User();
+            tempUser.setUsername(username);
+            tempUser.setEmail(email);
+            tempUser.setfName(fName);
+            tempUser.setlName(lName);
+            tempUser.setId(id);
+
+            if (userRepo.updatePersonalInfo(tempUser) != null) {
+
+                return true;
+            }
+        }
+        return false;
+    }
+    public boolean deleteUserById (String id) {
+        // Sanitize input
+        if (!id.isBlank()) {
+            User usr = new User();
+            usr.setId(Integer.parseInt(id));
+            return userRepo.delete(usr) != null;
+        }
+
+        return false;
+    }
+
+    public boolean[] checkSecurityAnswers (String username, String ans1, String ans2, String ans3){
+>>>>>>> myAccountKevin
         String correctAnswer1 = userRepo.getSecurityAnswer(username, 0);
         String correctAnswer2 = userRepo.getSecurityAnswer(username, 1);
         String correctAnswer3 = userRepo.getSecurityAnswer(username, 2);
@@ -231,5 +288,8 @@ public class UserService {
         boolean[] correct = {ans1.equals(correctAnswer1), ans2.equals(correctAnswer2), ans3.equals(correctAnswer3)};
         return correct;
     }
+<<<<<<< HEAD
 
+=======
+>>>>>>> myAccountKevin
 }

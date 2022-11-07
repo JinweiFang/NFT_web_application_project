@@ -19,6 +19,12 @@
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
                 <% } %>
+                <% if (request.getParameterMap().containsKey("succsmsg") && request.getParameter("succsmsg").equals("1")) { %>
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    Successfully deleted account!
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                <% } %>
                 <div class="form-row form-group">
                     <label for="inputUsername">Username</label>
                     <input type="text" name="username" class="form-control" id="inputUsername" placeholder="Username"
