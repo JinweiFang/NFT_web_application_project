@@ -181,7 +181,7 @@
                         Delete your account permanently.
                     </p>
                     <!-- Form -->
-                    <form action="/profile/deleteAccount" method="post">
+                    <form action="/profile/deleteAccount" onSubmit="return confirm('Are you sure you want to delete your account?')" method="post">
                         <fieldset>
                             <!--authenticate-->
                             <div>
