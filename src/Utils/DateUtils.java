@@ -25,7 +25,7 @@ public class DateUtils {
         return ut + minutes;
     }
 
-    public  static Date covertUnixTimestampToDate(long timestamp){
+    public static Date covertUnixTimestampToDate(long timestamp){
         Date date = Date.from(Instant.ofEpochSecond(timestamp));
         return date;
     }

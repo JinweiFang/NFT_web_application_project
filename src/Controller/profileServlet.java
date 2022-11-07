@@ -20,14 +20,28 @@ public class profileServlet extends HttpServlet {
     public void init() {this.userService = new UserService();}
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        handleUnauthorizedAccess(req, resp);
+        // Handle authorized access
+        HttpSession session = req.getSession(false);
+        User loggedUser = (session == null) ? null : (User) session.getAttribute("user");
+        if (loggedUser == null) {
+            resp.sendRedirect(req.getContextPath() + "/account/login.jsp");
+            return;
+        }
+
         RequestDispatcher dispatcher = req.getRequestDispatcher(req.getContextPath() + "WEB-INF/View/account/profile.jsp");
         dispatcher.forward(req, resp);
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        handleUnauthorizedAccess(req, resp);
+        // Handle authorized access
+        HttpSession session = req.getSession(false);
+        User loggedUser = (session == null) ? null : (User) session.getAttribute("user");
+        if (loggedUser == null) {
+            resp.sendRedirect(req.getContextPath() + "/account/login.jsp");
+            return;
+        }
+
         // Handle url routing
         // for example: [currentServlet]/someurl/..
         if (req.getPathInfo() != null && req.getPathInfo().length() > 1) {
@@ -45,15 +59,6 @@ public class profileServlet extends HttpServlet {
             else if (urls[0].equals("deleteAccount")) {
                 deleteAccount(req, resp);
             }
-        }
-    }
-
-    private void handleUnauthorizedAccess(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        HttpSession session = req.getSession(false);
-        User loggedUser = (session == null) ? null : (User) session.getAttribute("user");
-        if (loggedUser == null) {
-            resp.sendRedirect(req.getContextPath() + "/account/login.jsp");
-            return;
         }
     }
 

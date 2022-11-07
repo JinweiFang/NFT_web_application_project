@@ -50,17 +50,9 @@ public class authenticateServlet extends HttpServlet {
             else if (urls[0].equals("new-password")) handleNewPassword(req, resp);
             // Route -> authenticate/register
             else if (urls[0].equals("register")) handleRegistration(req, resp);
-            // Route -> authenticate/register@admin
-            else if (urls[0].equals("register@admin")) handleRegistrationByAdmin(req, resp);
-            // Route -> authenticate/update@admin
-            else if (urls[0].equals("update@admin")) handleUpdateByAdmin(req, resp);
-            // Route -> authenticate/delete@admin
-            else if (urls[0].equals("delete@admin")) handleDeletionByAdmin(req, resp);
         }
     }
 
-
-    // HELPER METHODS
     private void handleLogout(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         HttpSession session = req.getSession(false);
         session.invalidate();
@@ -154,72 +146,5 @@ public class authenticateServlet extends HttpServlet {
         }
 
         resp.sendRedirect(redirect);
-    }
-
-
-
-    /*
-    Having separate method methods for admin is crucial for security purposes
-    It also makes it easier to handle error messages
-     */
-    private void handleUnauthorizedAccessByNonAdmin(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        HttpSession session = req.getSession(false);
-        User loggedUser = (session == null) ? null : (User) session.getAttribute("user");
-
-        if (loggedUser == null || !loggedUser.isAdmin()) {
-            String msg = "Must be an admin!";
-            RequestDispatcher dispatcher = req.getRequestDispatcher(req.getContextPath() + "/WEB-INF/View/display-message.jsp?msg=" + msg);
-            dispatcher.forward(req, resp);
-            return;
-        }
-    }
-
-    private void handleRegistrationByAdmin(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-        // Handle unauthorized access (must be admin)
-        handleUnauthorizedAccessByNonAdmin(req, resp);
-
-        boolean registrationSuccess = userService.registerUser(req.getParameter("fName"), req.getParameter("lName"),
-                req.getParameter("email"), req.getParameter("username"), req.getParameter("password"),
-                req.getParameter("accountType"));
-
-        if(registrationSuccess) {
-            resp.sendRedirect(req.getContextPath() + "/admin/account-list?successmsg=1");
-            return;
-        }
-
-        // Redirect back to account list if registration failed
-        resp.sendRedirect(req.getContextPath() + "/admin/account-list?errmsg=1");
-    }
-
-    private void handleUpdateByAdmin(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-        // Handle unauthorized access (must be admin)
-        handleUnauthorizedAccessByNonAdmin(req, resp);
-
-        boolean updateSuccess = userService.updateUserById(req.getParameter("id"), req.getParameter("fName"), req.getParameter("lName"),
-                req.getParameter("email"), req.getParameter("username"), req.getParameter("password"),
-                req.getParameter("accountType"));
-
-        if(updateSuccess) {
-            resp.sendRedirect(req.getContextPath() + "/admin/account-list?successmsg=1");
-            return;
-        }
-
-        // Redirect back to account list if registration failed
-        resp.sendRedirect(req.getContextPath() + "/admin/account-list?errmsg=1");
-    }
-
-    private void handleDeletionByAdmin(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        // Handle unauthorized access (must be admin)
-        handleUnauthorizedAccessByNonAdmin(req, resp);
-
-        boolean deletionSuccess = userService.deleteUserById(req.getParameter("id"));
-
-        if(deletionSuccess) {
-            resp.sendRedirect(req.getContextPath() + "/admin/account-list?successmsg=1");
-            return;
-        }
-
-        // Redirect back to account list if registration failed
-        resp.sendRedirect(req.getContextPath() + "/admin/account-list?errmsg=1");
     }
 }

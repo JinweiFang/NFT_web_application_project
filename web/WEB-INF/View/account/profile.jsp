@@ -23,7 +23,7 @@
 
                 <%if(request.getParameter("errmsg").equals("2")) { %>
                 <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    Wrong Password!
+                    Wrong password!
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
                 <% }%>
@@ -38,14 +38,14 @@
                 <% if (request.getParameterMap().containsKey("errmsg")) { %>
                 <%if(request.getParameter("errmsg").equals("3")) { %>
                 <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    Personal Information Changed!
+                    Personal information changed!
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
                 <% }%>
 
                 <%if(request.getParameter("errmsg").equals("4")) { %>
                 <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    Password Changed!
+                    Password changed!
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
                 <% }%>

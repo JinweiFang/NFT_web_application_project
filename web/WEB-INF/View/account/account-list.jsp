@@ -79,7 +79,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form id="addAccountForm" action="/authenticate/register@admin" method="post" class="general flex-fill">
+                <form id="addAccountForm" action="/admin/register" method="post" class="general flex-fill">
                     <div class="form-row form-group">
                         <label for="inputfName">First Name</label>
                         <input type="text" name="fName" class="form-control" id="inputfName" placeholder="First Name"
@@ -133,7 +133,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form id="editAccountForm" action="/authenticate/update@admin" method="post" class="general flex-fill">
+                <form id="editAccountForm" action="/admin/update" method="post" class="general flex-fill">
                     <div class="d-none">
                         <input type="hidden" id="inputId2" name="id"  value="">
                     </div>
@@ -174,7 +174,7 @@
             </div>
             <div class="modal-footer border-top-0 p-0 pb-3 justify-content-center">
                 <button type="submit" form="editAccountForm" class="btn btn-primary">Update</button>
-                <button type="submit" form="editAccountForm" formaction="/authenticate/delete@admin" class="btn btn-danger">Remove</button>
+                <button type="submit" form="editAccountForm" formaction="/admin/delete" class="btn btn-danger">Remove</button>
             </div>
         </div>
     </div>
