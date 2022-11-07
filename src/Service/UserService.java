@@ -216,7 +216,7 @@ public class UserService {
         return false;
     }
 
-    public boolean updatePersonalInfo(HttpServletRequest req, String fName, String lName, String email, String username, int id) {
+    public boolean updatePersonalInfo(int id, String fName, String lName, String email, String username) {
         // Sanitize input
         if (!fName.isBlank() && !lName.isBlank() && !email.isBlank() && !username.isBlank()) {
             // Sanitize input sure the input is proper
@@ -228,13 +228,6 @@ public class UserService {
             tempUser.setId(id);
 
             if (userRepo.updatePersonalInfo(tempUser) != null) {
-                //The database was updated, now we need to update the session to reflect the right info
-                User sessionUser = ((User) req.getSession().getAttribute("user"));
-                sessionUser.setUsername(username);
-                sessionUser.setEmail(email);
-                sessionUser.setfName(fName);
-                sessionUser.setlName(lName);
-                sessionUser.setId(id);
 
                 return true;
             }

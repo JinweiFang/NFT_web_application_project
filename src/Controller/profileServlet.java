@@ -20,12 +20,14 @@ public class profileServlet extends HttpServlet {
     public void init() {this.userService = new UserService();}
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        handleUnauthorizedAccess(req, resp);
         RequestDispatcher dispatcher = req.getRequestDispatcher(req.getContextPath() + "WEB-INF/View/account/profile.jsp");
         dispatcher.forward(req, resp);
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        handleUnauthorizedAccess(req, resp);
         // Handle url routing
         // for example: [currentServlet]/someurl/..
         if (req.getPathInfo() != null && req.getPathInfo().length() > 1) {
@@ -46,8 +48,24 @@ public class profileServlet extends HttpServlet {
         }
     }
 
+    private void handleUnauthorizedAccess(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        HttpSession session = req.getSession(false);
+        User loggedUser = (session == null) ? null : (User) session.getAttribute("user");
+        if (loggedUser == null) {
+            resp.sendRedirect(req.getContextPath() + "/account/login.jsp");
+            return;
+        }
+    }
+
     private void passwordChange(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        //check that the oldPassword is correct
+        User loggedUser = (User) req.getSession().getAttribute("user");
+
+        // make sure logged user can only update their password
+        if(loggedUser == null || !loggedUser.getUsername().equals(req.getParameter("username"))) {
+            resp.sendRedirect(req.getContextPath() + "/profile?errmsg=1");
+        }
+
+        // check that the oldPassword is correct
         User response = userService.authenticateUser(req.getParameter("username"), req.getParameter("oldPassword"));
 
         // return error if the old password confirmation fails or the update fails
@@ -58,46 +76,46 @@ public class profileServlet extends HttpServlet {
             resp.sendRedirect("/profile?errmsg=4");
         }
     }
-    private void personalInformationChange(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        User response = userService.authenticateUser(req.getParameter("usernameValidate"), req.getParameter("passwordValidate"));
 
-        if (response != null) {
+    private void personalInformationChange(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        User loggedUser = (User) req.getSession().getAttribute("user");
+
+        if (loggedUser != null) {
             String username = req.getParameter("username");
             String email = req.getParameter("email");
             String fName = req.getParameter("fName");
             String lName = req.getParameter("lName");
-            int id = response.getId();
 
-            HttpSession session = req.getSession(false);
-            if (session == null) {
-                throw new RuntimeException("This user must have a valid session to change personal information.");
-            }
+            if (userService.updatePersonalInfo(loggedUser.getId(), fName, lName, email, username)) {
+                // The database was updated, now we need to update the session to reflect the right info
+                loggedUser.setUsername(username);
+                loggedUser.setEmail(email);
+                loggedUser.setfName(fName);
+                loggedUser.setlName(lName);
 
-            if (userService.updatePersonalInfo(req, fName, lName, email, username, id)) {
-                //update this user's info
+                // Update this user's info
                 resp.sendRedirect(req.getContextPath() + "/profile?errmsg=3");
                 return;
             }
         }
+
         resp.sendRedirect(req.getContextPath() + "/profile?errmsg=1");
     }
 
     private void deleteAccount(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-        // Handle unauthorized access (must be admin)
-        User response = userService.authenticateUser(req.getParameter("usernameDelete"), req.getParameter("passwordDelete"));
+        User loggedUser = (User) req.getSession().getAttribute("user");
 
-        if (response != null) {
-            boolean deletionSuccess = userService.deleteUserById(String.valueOf(response.getId()));
+        if (loggedUser != null) {
+            boolean deletionSuccess = userService.deleteUserById(String.valueOf(loggedUser.getId()));
             if (deletionSuccess) {
                 HttpSession session = req.getSession(false);
                 session.invalidate();
 
-                RequestDispatcher dispatcher = req.getRequestDispatcher(req.getContextPath() + "web/WEB-INF/View/dashboard.jsp");
-                dispatcher.forward(req, resp);
+                resp.sendRedirect(req.getContextPath() + "/account/login.jsp?succsmsg=1");
                 return;
             }
-
-            resp.sendRedirect(req.getContextPath() + "/profile?errmsg=1");
         }
+
+        resp.sendRedirect(req.getContextPath() + "/profile?errmsg=1");
     }
 }
