@@ -157,7 +157,7 @@ public class userContext extends abstractConnect implements userDao {
     }
 
     @Override
-    public User updateByUsername(User item) {
+    public User updatePasswordByUsername(User item) {
         String sql = "UPDATE users SET password = ? WHERE username = ?";
         boolean success = false;
 

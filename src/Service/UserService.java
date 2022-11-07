@@ -42,11 +42,6 @@ public class UserService {
         return (List<User>) userRepo.findAll();
     }
 
-    /**
-     *
-     * @param username
-     * @return user dto or null if user doesn't exist
-     */
     public User findUserByUsername(String username) {
         // Sanitize input
         if (!username.isBlank()) {
@@ -59,12 +54,6 @@ public class UserService {
         return null;
     }
 
-    /**
-     * Update user password by username
-     * @param username
-     * @param password
-     * @return
-     */
     public boolean updateUserPassword(String username, String password) {
         // Sanitize input sure the input is proper
         if (!username.isBlank() && !password.isBlank()) {
@@ -72,7 +61,7 @@ public class UserService {
             usr.setUsername(username);
             usr.setPassword(password);
 
-            return userRepo.updateByUsername(usr) != null;
+            return userRepo.updatePasswordByUsername(usr) != null;
         }
 
         return false;
@@ -194,10 +183,10 @@ public class UserService {
         return registerUser(fName, lName, email, username, password, balance, isAdminInt, "", "", "");
     }
 
-    public boolean updateUserById (String id, String fName, String lName, String email, String username, String
-            password, String isAdmin){
+    public boolean updateUserById(String id, String fName, String lName, String email, String username, String password, String isAdmin){
         // Sanitize input
         if (!id.isBlank() && !fName.isBlank() && !lName.isBlank() && !email.isBlank() && !username.isBlank() && !isAdmin.isBlank()) {
+
             User usr = new User();
             usr.setId(Integer.parseInt(id));
             usr.setfName(fName);
@@ -205,6 +194,7 @@ public class UserService {
             usr.setEmail(email);
             usr.setUsername(username);
             usr.setIsAdmin(Integer.parseInt(isAdmin));
+
             usr = userRepo.update(usr); // if unsuccessful returns null
 
             // !password may not always be updated
