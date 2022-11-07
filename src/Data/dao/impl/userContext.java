@@ -232,6 +232,7 @@ public class userContext extends abstractConnect implements userDao {
     @Override
     public String getSecurityAnswer(String username, int status) {
 
+        String result = null;
         String target = null;
         if(status == 0) target = "securityAns1";
         else if(status == 1) target = "securityAns2";
@@ -244,15 +245,12 @@ public class userContext extends abstractConnect implements userDao {
             pstm.setString(1, username);
             ResultSet res = pstm.executeQuery();
 
-            if (res.next()) {
-                return res.getString(1);
-            }
-
+            if (res.next()) result = res.getString(1);
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
 
-        return null;
+        return result;
     }
 
 }
