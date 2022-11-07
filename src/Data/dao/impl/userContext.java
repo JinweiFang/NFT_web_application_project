@@ -183,24 +183,6 @@ public class userContext extends abstractConnect implements userDao {
     }
 
     @Override
-    public User delete(User item) {
-        String sql = "DELETE FROM users WHERE id = ?";
-        boolean success = false;
-
-        try (PreparedStatement pstm = getConn().prepareStatement(sql)) {
-            pstm.setInt(1, item.getId());
-
-            if (pstm.executeUpdate() == 0) throw new SQLException("Delete failed! no rows affected.");
-
-            success = true;
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-
-        return (success) ? item : null;
-    }
-
-    @Override
     public User updatePersonalInfo(User item) {
         String sql = "UPDATE users SET fname = ?, lname = ?, username = ?, email = ? WHERE id = ?";
         boolean success = false;
@@ -227,6 +209,24 @@ public class userContext extends abstractConnect implements userDao {
         }
 
         return success ? item : null;
+    }
+
+    @Override
+    public User delete(User item) {
+        String sql = "DELETE FROM users WHERE id = ?";
+        boolean success = false;
+
+        try (PreparedStatement pstm = getConn().prepareStatement(sql)) {
+            pstm.setInt(1, item.getId());
+
+            if (pstm.executeUpdate() == 0) throw new SQLException("Delete failed! no rows affected.");
+
+            success = true;
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        return (success) ? item : null;
     }
 
     @Override

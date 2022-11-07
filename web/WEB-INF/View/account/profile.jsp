@@ -1,10 +1,4 @@
-<%@ page import="java.util.List" %><%--
-  Created by IntelliJ IDEA.
-  User: johnpiapian
-  Date: 8/25/22
-  Time: 10:10 PM
-  To change this template use File | Settings | File Templates.
---%>
+<%@ page import="java.util.List" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ include file="../../Templates/Header.jsp" %>
 <main class="container-fluid">
@@ -58,23 +52,18 @@
             <div class="card-header">
                 <h3 class="mb-0">My Account</h3>
             </div>
+
             <!-- Welcome Message -->
-            <div class="d-lg-flex align-items-center justify-content-between">
-                <hr class="my-5" />
-                <div class="d-flex align-items-center mb-4 mb-lg-0">
-<%--                    for when you feel like doing this--%>
-<%--                    <img src="./assets/avatar/code lines.jpg" id="img-uploaded" height="800px" width="800px"--%>
-<%--                         class="avatar-xl rounded-circle" alt="" />--%>
-                    <div class="ms-3">
-                        <h4 class="mb-0">Your avatar</h4>
-                        <p class="mb-0">
-                            PNG or JPG no bigger than 800px wide and tall.
-                        </p>
-                    </div>
-                </div>
+            <div class="card-body">
                 <div>
-                    <a href="#" class="btn btn-outline-white btn-sm px-3 pl-10">Update</a>
-                    <a href="#" class="btn btn-outline-danger btn-sm px-6">Delete</a>
+                    <div class="avatar-container py-2">
+                        <img src="https://picsum.photos/500/500" id="img-uploaded" height="180px"
+                             class="avatar-xl rounded-circle" alt="" />
+                    </div>
+                    <div class="form-container py-2">
+                        <a href="#" class="btn btn-outline-white btn-sm px-3 pl-10">Update</a>
+                        <a href="#" class="btn btn-outline-danger btn-sm px-6">Delete</a>
+                    </div>
                 </div>
             </div>
 
