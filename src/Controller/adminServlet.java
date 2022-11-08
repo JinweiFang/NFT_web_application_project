@@ -77,8 +77,8 @@ public class adminServlet extends HttpServlet {
 
     private void handleRegistration(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         boolean registrationSuccess = userService.registerUser(req.getParameter("fName"), req.getParameter("lName"),
-                req.getParameter("email"), req.getParameter("username"), req.getParameter("password"),
-                req.getParameter("accountType"));
+                req.getParameter("email"), req.getParameter("username"), req.getParameter("password"), req.getParameter("accountType"), req.getParameter("secAns1"),
+                req.getParameter("secAns2"), req.getParameter("secAns3"));
 
         if(registrationSuccess) {
             resp.sendRedirect(req.getContextPath() + "/admin/account-list?successmsg=1");
@@ -92,7 +92,7 @@ public class adminServlet extends HttpServlet {
     private void handleUpdate(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         boolean updateSuccess = userService.updateUserById(req.getParameter("id"), req.getParameter("fName"), req.getParameter("lName"),
                 req.getParameter("email"), req.getParameter("username"), req.getParameter("password"),
-                req.getParameter("accountType"));
+                req.getParameter("accountType"), req.getParameter("secAns1"), req.getParameter("secAns2"), req.getParameter("secAns3"));
 
         if(updateSuccess) {
             HttpSession session = req.getSession(false);
@@ -104,9 +104,9 @@ public class adminServlet extends HttpServlet {
                 loggedUser.setEmail(req.getParameter("email"));
                 loggedUser.setUsername(req.getParameter("username"));
                 loggedUser.setIsAdmin(Integer.parseInt(req.getParameter("accountType")));
+                loggedUser.setSecAnswers(req.getParameter("secAns1"), req.getParameter("secAns2"), req.getParameter("secAns3"));
                 if (!req.getParameter("password").isBlank()) loggedUser.setPassword(req.getParameter("password"));
             }
-
             resp.sendRedirect(req.getContextPath() + "/admin/account-list?successmsg=1");
             return;
         }

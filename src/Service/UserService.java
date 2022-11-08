@@ -2,13 +2,12 @@ package Service;
 
 import Data.dao.TokenDao;
 import Data.dao.impl.tokenContext;
+import Data.dao.impl.userContext;
 import Data.dao.userDao;
 import Data.dataSource;
-import Data.dao.impl.userContext;
 import Domain.Token;
 import Domain.User;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 import static Utils.DateUtils.generateUnixTimestamp;
@@ -102,14 +101,6 @@ public class UserService {
      * Reusable user registration method
      * isAdmin = 0 denotes a non-admin user
      * default balance is 300
-     * @param fName
-     * @param lName
-     * @param email
-     * @param username
-     * @param password
-     * @param balance
-     * @param isAdmin
-     * @return true or false
      */
     private boolean registerUser(String fName, String lName, String email, String username, String password, double balance, int isAdmin, String secAns1, String secAns2, String secAns3){
         // Sanitize input
@@ -138,12 +129,6 @@ public class UserService {
 
     /**
      * Bare minimum registration requirement
-     * @param fName
-     * @param lName
-     * @param email
-     * @param username
-     * @param password
-     * @return
      */
     public boolean registerUser (String fName, String lName, String email, String username, String password){
         return registerUser(fName, lName, email, username, password, 0, 0, "", "", "");
@@ -151,15 +136,6 @@ public class UserService {
 
     /**
      * Registration with security questions, but excluding balance and isAdmin
-     * @param fName
-     * @param lName
-     * @param email
-     * @param username
-     * @param password
-     * @param secAns1
-     * @param secAns2
-     * @param secAns3
-     * @return
      */
     public boolean registerUser (String fName, String lName, String email, String username, String password, String
             secAns1, String secAns2, String secAns3){
@@ -168,13 +144,6 @@ public class UserService {
 
     /**
      * Registration with balance and isAdmin, but excluding security questions
-     * @param fName
-     * @param lName
-     * @param email
-     * @param username
-     * @param password
-     * @param isAdmin
-     * @return
      */
     public boolean registerUser (String fName, String lName, String email, String username, String password, String
             isAdmin){
@@ -183,7 +152,21 @@ public class UserService {
         return registerUser(fName, lName, email, username, password, balance, isAdminInt, "", "", "");
     }
 
-    public boolean updateUserById(String id, String fName, String lName, String email, String username, String password, String isAdmin){
+    /**
+     * Registration with isAdmin and security questions
+     */
+    public boolean registerUser (String fName, String lName, String email, String username, String password, String
+            isAdmin, String
+            secAns1, String secAns2, String secAns3){
+        double balance = 300;
+        int isAdminInt = Integer.parseInt(isAdmin);
+        return registerUser(fName, lName, email, username, password, balance, isAdminInt, secAns1, secAns2, secAns3);
+    }
+
+    /**
+     * update user by id with all parameters
+     */
+    public boolean updateUserById(String id, String fName, String lName, String email, String username, String password, String isAdmin, String secAns1, String secAns2, String secAns3){
         // Sanitize input
         if (!id.isBlank() && !fName.isBlank() && !lName.isBlank() && !email.isBlank() && !username.isBlank() && !isAdmin.isBlank()) {
 
@@ -194,6 +177,7 @@ public class UserService {
             usr.setEmail(email);
             usr.setUsername(username);
             usr.setIsAdmin(Integer.parseInt(isAdmin));
+            usr.setSecAnswers(secAns1, secAns2, secAns3);
 
             usr = userRepo.update(usr); // if unsuccessful returns null
 
@@ -205,6 +189,14 @@ public class UserService {
 
         return false;
     }
+
+    /**
+     * update user by id without security questions
+     */
+    public boolean updateUserById(String id, String fName, String lName, String email, String username, String password, String isAdmin){
+        return updateUserById(id, fName, lName, email, username, password, isAdmin, "", "", "");
+    }
+
 
     public boolean updatePersonalInfo(int id, String fName, String lName, String email, String username) {
         // Sanitize input

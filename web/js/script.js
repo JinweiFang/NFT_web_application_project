@@ -16,6 +16,9 @@ if(editAccountByAdminForm != null) {
         form.querySelector("#inputEmail2").value = data.querySelector("#user-email").textContent;
         form.querySelector("#inputAccountType2").value = data.querySelector("#user-isadmin").textContent == "Yes" ? 1 : 0;
         form.querySelector("#inputUsername2").value = data.querySelector("#user-username").textContent;
+        form.querySelector("#inputSecurityAnswer21").value = data.querySelector("#user-secAns1").textContent;
+        form.querySelector("#inputSecurityAnswer22").value = data.querySelector("#user-secAns2").textContent;
+        form.querySelector("#inputSecurityAnswer23").value = data.querySelector("#user-secAns3").textContent;
     });
 }
 

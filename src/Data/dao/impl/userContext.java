@@ -20,7 +20,7 @@ public class userContext extends abstractConnect implements userDao {
 
     @Override
     public Collection<User> findAll() {
-        String sql = "SELECT id, fname, lname, email, username, balance, isAdmin FROM users";
+        String sql = "SELECT id, fname, lname, email, username, balance, isAdmin, securityAns1, securityAns2, securityAns3 FROM users";
         List<User> result = new ArrayList<>();
 
         try (PreparedStatement pstm = getConn().prepareStatement(sql)) {
@@ -35,6 +35,7 @@ public class userContext extends abstractConnect implements userDao {
                 usr.setUsername(res.getString(5));
                 usr.setBalance(res.getDouble(6));
                 usr.setIsAdmin(res.getInt(7));
+                usr.setSecAnswers(res.getString(8), res.getString(9), res.getString(10));
                 result.add(usr);
             }
 
@@ -47,7 +48,7 @@ public class userContext extends abstractConnect implements userDao {
 
     @Override
     public User find(User item) {
-        String sql = "SELECT id, fname, lname, email, username, password, balance, isAdmin FROM users WHERE username = ? AND password = ? ";
+        String sql = "SELECT id, fname, lname, email, username, password, balance, isAdmin, securityAns1, securityAns2, securityAns3 FROM users WHERE username = ? AND password = ? ";
         User result = null;
 
         try (PreparedStatement pstm = getConn().prepareStatement(sql)) {
@@ -65,6 +66,7 @@ public class userContext extends abstractConnect implements userDao {
                 usr.setPassword(res.getString(6));
                 usr.setBalance(res.getDouble(7));
                 usr.setIsAdmin(res.getInt(8));
+                usr.setSecAnswers(res.getString(8), res.getString(9), res.getString(10));
                 result = usr;
             }
 
@@ -134,7 +136,7 @@ public class userContext extends abstractConnect implements userDao {
 
     @Override
     public User update(User item) {
-        String sql = "UPDATE users SET fname=?, lname=?, email=?, isadmin=?, username=? WHERE id=?";
+        String sql = "UPDATE users SET fname=?, lname=?, email=?, isadmin=?, username=?, securityAns1=?, securityAns2=?, securityAns3=? WHERE id=?";
         boolean success = false;
 
         try (PreparedStatement pstm = getConn().prepareStatement(sql)) {
@@ -143,7 +145,10 @@ public class userContext extends abstractConnect implements userDao {
             pstm.setString(3, item.getEmail());
             pstm.setInt(4, item.getIsAdmin());
             pstm.setString(5, item.getUsername());
-            pstm.setInt(6, item.getId());
+            pstm.setString(6, item.getSecAns1());
+            pstm.setString(7, item.getSecAns2());
+            pstm.setString(8, item.getSecAns3());
+            pstm.setInt(9, item.getId());
 
             if (pstm.executeUpdate() == 0) throw new SQLException("Update failed! no rows affected.");
 
