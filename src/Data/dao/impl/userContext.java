@@ -68,7 +68,6 @@ public class userContext extends abstractConnect implements userDao {
                 result = usr;
             }
 
-            pstm.close();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
