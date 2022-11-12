@@ -57,6 +57,9 @@
                     <td id="user-email" class="align-middle"><%=usr.getEmail()%></td>
                     <td id="user-balance" class="align-middle">$<%=usr.getBalance()%></td>
                     <td id="user-isadmin" class="align-middle"><%=usr.isAdmin() ? "Yes" : "No"%></td>
+                    <td id="user-secAns1" class="align-middle" hidden><%=usr.getSecAns1() != null ? usr.getSecAns1() : ""%></td>
+                    <td id="user-secAns2" class="align-middle" hidden><%=usr.getSecAns2() != null ? usr.getSecAns2() : ""%></td>
+                    <td id="user-secAns3" class="align-middle" hidden><%=usr.getSecAns3() != null ? usr.getSecAns3() : ""%></td>
                     <td class="align-middle">
                         <button id="adminEditButton" type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#editAccountFormContainer" data-bs-uid="<%=usr.getId()%>">Edit</button>
                     </td>
@@ -79,7 +82,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form id="addAccountForm" action="/authenticate/register@admin" method="post" class="general flex-fill">
+                <form id="addAccountForm" action="/admin/register" method="post" class="general flex-fill">
                     <div class="form-row form-group">
                         <label for="inputfName">First Name</label>
                         <input type="text" name="fName" class="form-control" id="inputfName" placeholder="First Name"
@@ -114,6 +117,21 @@
                                placeholder="Password"
                                required>
                     </div>
+                    <div class="form-row form-group">
+                        <label for="inputSecurityAnswer1">Security question 1: What city were you born in?</label>
+                        <input type="text" name="secAns1" class="form-control" id="inputSecurityAnswer1"
+                               placeholder="Answer">
+                    </div>
+                    <div class="form-row form-group">
+                        <label for="inputSecurityAnswer2">Security question 2: What was your favorite food as a child?</label>
+                        <input type="text" name="secAns2" class="form-control" id="inputSecurityAnswer2"
+                               placeholder="Answer">
+                    </div>
+                    <div class="form-row form-group">
+                        <label for="inputSecurityAnswer3">Security question 3: What was the name of your elementary school?</label>
+                        <input type="text" name="secAns3" class="form-control" id="inputSecurityAnswer3"
+                               placeholder="Answer">
+                    </div>
                 </form>
             </div>
             <div class="modal-footer border-top-0 p-0 pb-3 justify-content-center">
@@ -133,7 +151,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form id="editAccountForm" action="/authenticate/update@admin" method="post" class="general flex-fill">
+                <form id="editAccountForm" action="/admin/update" method="post" class="general flex-fill">
                     <div class="d-none">
                         <input type="hidden" id="inputId2" name="id"  value="">
                     </div>
@@ -170,11 +188,26 @@
                         <input type="password" name="password" class="form-control" id="inputPassword2"
                                placeholder="Password">
                     </div>
+                    <div class="form-row form-group">
+                        <label for="inputSecurityAnswer1">Security question 1: What city were you born in?</label>
+                        <input type="text" name="secAns1" class="form-control" id="inputSecurityAnswer21"
+                               placeholder="Answer">
+                    </div>
+                    <div class="form-row form-group">
+                        <label for="inputSecurityAnswer2">Security question 2: What was your favorite food as a child?</label>
+                        <input type="text" name="secAns2" class="form-control" id="inputSecurityAnswer22"
+                               placeholder="Answer">
+                    </div>
+                    <div class="form-row form-group">
+                        <label for="inputSecurityAnswer3">Security question 3: What was the name of your elementary school?</label>
+                        <input type="text" name="secAns3" class="form-control" id="inputSecurityAnswer23"
+                               placeholder="Answer">
+                    </div>
                 </form>
             </div>
             <div class="modal-footer border-top-0 p-0 pb-3 justify-content-center">
                 <button type="submit" form="editAccountForm" class="btn btn-primary">Update</button>
-                <button type="submit" form="editAccountForm" formaction="/authenticate/delete@admin" class="btn btn-danger">Remove</button>
+                <button type="submit" form="editAccountForm" formaction="/admin/delete" class="btn btn-danger">Remove</button>
             </div>
         </div>
     </div>
