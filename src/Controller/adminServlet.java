@@ -95,10 +95,10 @@ public class adminServlet extends HttpServlet {
                 req.getParameter("accountType"), req.getParameter("secAns1"), req.getParameter("secAns2"), req.getParameter("secAns3"));
 
         if(updateSuccess) {
-            HttpSession session = req.getSession(false);
-            User loggedUser = (session == null) ? null : (User) session.getAttribute("user");
+            User loggedUser = (User) req.getSession().getAttribute("user");
 
-            if (loggedUser.getId() == Integer.parseInt(req.getParameter("id"))) {
+            // Defensive programming - without being logged in, the page cannot be accessed
+            if (loggedUser !=  null && loggedUser.getId() == Integer.parseInt(req.getParameter("id"))) {
                 loggedUser.setfName(req.getParameter("fName"));
                 loggedUser.setlName(req.getParameter("lName"));
                 loggedUser.setEmail(req.getParameter("email"));
@@ -107,6 +107,7 @@ public class adminServlet extends HttpServlet {
                 loggedUser.setSecAnswers(req.getParameter("secAns1"), req.getParameter("secAns2"), req.getParameter("secAns3"));
                 if (!req.getParameter("password").isBlank()) loggedUser.setPassword(req.getParameter("password"));
             }
+            
             resp.sendRedirect(req.getContextPath() + "/admin/account-list?successmsg=1");
             return;
         }
@@ -119,7 +120,15 @@ public class adminServlet extends HttpServlet {
         boolean deletionSuccess = userService.deleteUserById(req.getParameter("id"));
 
         if(deletionSuccess) {
-            resp.sendRedirect(req.getContextPath() + "/admin/account-list?successmsg=1");
+            User loggedUser = (User) req.getSession().getAttribute("user");
+
+            // Defensive programming - without being logged in, the page cannot be accessed
+            if (loggedUser !=  null && loggedUser.getId() == Integer.parseInt(req.getParameter("id"))) {
+                resp.sendRedirect(req.getContextPath() + "/authenticate/logout");
+            } else {
+                resp.sendRedirect(req.getContextPath() + "/admin/account-list?successmsg=1");
+            }
+
             return;
         }
 

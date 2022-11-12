@@ -113,10 +113,7 @@ public class profileServlet extends HttpServlet {
         if (loggedUser != null) {
             boolean deletionSuccess = userService.deleteUserById(String.valueOf(loggedUser.getId()));
             if (deletionSuccess) {
-                HttpSession session = req.getSession(false);
-                session.invalidate();
-
-                resp.sendRedirect(req.getContextPath() + "/account/login.jsp?succsmsg=1");
+                resp.sendRedirect(req.getContextPath() + "/authenticate/logout");
                 return;
             }
         }
