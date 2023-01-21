@@ -16,6 +16,11 @@ main {
     padding: 35px 15px 15px;
 }
 
+img.nft-card-img {
+    padding: 5%;
+    border-radius: 8%;
+}
+
 form.login,
 form.signup {
     max-width: 450px;

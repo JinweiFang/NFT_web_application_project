@@ -25,7 +25,7 @@ public class nftContext extends abstractConnect implements NftDao {
 
     @Override
     public Collection<Nft> findNftsByOwnerID(Nft nft) {
-        String sql = "SELECT * FROM users WHERE ownerId = ?";
+        String sql = "SELECT * FROM nfts WHERE ownerId = ?";
         List<Nft> result = new ArrayList<>();
 
         try (PreparedStatement pstm = getConn().prepareStatement(sql)) {
