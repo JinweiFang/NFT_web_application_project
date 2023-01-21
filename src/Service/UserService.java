@@ -210,12 +210,25 @@ public class UserService {
             tempUser.setId(id);
 
             if (userRepo.updatePersonalInfo(tempUser) != null) {
-
                 return true;
             }
         }
         return false;
     }
+
+    public boolean updateProfileImage(int id, String profileImage) {
+        // Sanitize input
+        if (!profileImage.isBlank()) {
+            // Sanitize input sure the input is proper
+            User tempUser = new User();
+            tempUser.setProfileImage(profileImage);
+            tempUser.setId(id);
+
+            if (userRepo.updateProfileImage(tempUser) != null) return true;
+        }
+        return false;
+    }
+
     public boolean deleteUserById (String id) {
         // Sanitize input
         if (!id.isBlank()) {

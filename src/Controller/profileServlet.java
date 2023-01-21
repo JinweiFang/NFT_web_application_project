@@ -7,6 +7,8 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.*;
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.Base64;
 
 public class profileServlet extends HttpServlet {
     private UserService userService;
@@ -58,13 +60,26 @@ public class profileServlet extends HttpServlet {
     }
 
     private void profileChangeUpdate(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        Part filePart = req.getPart("profileImage");
-        String fileName = filePart.getSubmittedFileName();
-        for (Part part : req.getParts()) {
-            part.write(getServletContext().getRealPath("") + fileName);
+
+        User loggedUser = (User) req.getSession().getAttribute("user");
+
+        if (loggedUser != null) {
+            Part filePart = req.getPart("profileImage");
+            String fileType = filePart.getContentType();
+
+            byte[] imageBytes = filePart.getInputStream().readAllBytes();
+            String base64EncodedImage = Base64.getEncoder().encodeToString(imageBytes);
+
+            String imageUrl = "data:" + fileType + ";base64," + base64EncodedImage;
+
+            if(userService.updateProfileImage(loggedUser.getId(), imageUrl)) {
+                loggedUser.setProfileImage(imageUrl);
+                resp.sendRedirect(req.getContextPath() + "/profile?errmsg=3");
+                return;
+            }
         }
-        resp.getWriter().print("The file uploaded successfully.");
-        return;
+
+        resp.sendRedirect(req.getContextPath() + "/profile?errmsg=1");
     }
 
     private void passwordChange(HttpServletRequest req, HttpServletResponse resp) throws IOException {

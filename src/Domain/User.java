@@ -1,14 +1,15 @@
 package Domain;
 
+import java.util.Base64;
+
 public class User {
     private int id, isAdmin;
-    private String fName, lName, email, username, password, secAns1, secAns2, secAns3;
+    private String fName, lName, email, username, password, secAns1, secAns2, secAns3, profileImage;
     private double balance;
-    private byte[] profileImage;
 
     public User(){}
 
-    public User(int id, String fName, String lName, String email, String username, String password, double balance, int isAdmin, byte[] profileImage) {
+    public User(int id, String fName, String lName, String email, String username, String password, double balance, int isAdmin, String profileImage) {
         this.id = id;
         this.fName = fName;
         this.lName = lName;
@@ -21,7 +22,7 @@ public class User {
     }
 
     public User(int id, String fName, String lName, String email, String username, String password) {
-        this(id, fName, lName, email, username, password, 0, 0, null);
+        this(id, fName, lName, email, username, password, 0, 0, "");
     }
 
     public int getId() {
@@ -88,11 +89,11 @@ public class User {
         this.balance = balance;
     }
 
-    public byte[] getProfileImage() {
+    public String getProfileImage() {
         return profileImage;
     }
 
-    public void setProfileImage(byte[] profileImage) {
+    public void setProfileImage(String profileImage) {
         this.profileImage = profileImage;
     }
 
