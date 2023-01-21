@@ -30,19 +30,19 @@
             <div class="alert-success">
                 <%--error message : could not update the db --%>
                 <% if (request.getParameterMap().containsKey("errmsg")) { %>
-                <%if(request.getParameter("errmsg").equals("3")) { %>
-                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    Personal information changed!
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-                <% }%>
+                    <%if(request.getParameter("errmsg").equals("3")) { %>
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        Profile updated!
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    <% }%>
 
-                <%if(request.getParameter("errmsg").equals("4")) { %>
-                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    Password changed!
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-                <% }%>
+                    <%if(request.getParameter("errmsg").equals("4")) { %>
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        Password changed!
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    <% }%>
                 <% } %>
             </div>
         </div>
@@ -56,13 +56,20 @@
             <!-- Welcome Message -->
             <div class="card-body">
                 <div>
-                    <div class="avatar-container py-2">
-                        <img src="https://picsum.photos/500/500" id="img-uploaded" height="180px"
+                    <div class="avatar-container p-2 py-4">
+                        <img src="<%=currentUser.getProfileImage()%>" id="img-uploaded" height="180px"
                              class="avatar-xl rounded-circle" alt="" />
                     </div>
                     <div class="form-container py-2">
-                        <a href="#" class="btn btn-outline-white btn-sm px-3 pl-10">Update</a>
-                        <a href="#" class="btn btn-outline-danger btn-sm px-6">Delete</a>
+                        <form action="/profile/profileImageUpdate" method="post" enctype="multipart/form-data">
+                            <div class="mb-3 col-12 col-md-6">
+                                <div class="alert alert-warning p-2"><strong>Warning!</strong> Max file size is 2MB</div>
+                                <input class="form-control" type="file" id="formFile" name="profileImage" accept="image/png, image/jpeg" required>
+                            </div>
+                            <div class="mb-3 col-12 col-md-6">
+                                <button class="btn btn-primary" type="submit">Update</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -113,7 +120,7 @@
                                 <input type="hidden" name="usernameValidate" class="form-control" id="usernameValidate"
                                        value="<%= currentUser.getUsername()%>" required>
                             </div>
-                            <div class="col-12">
+                            <div class="mb-3 col-12 col-md-6">
                                 <!-- Button -->
                                 <button class="btn btn-primary" type="submit">Update Profile</button>
                             </div>
@@ -152,7 +159,7 @@
                                        placeholder="Password"
                                        required/>
                             </div>
-                            <div class="col-12">
+                            <div class="mb-3 col-12 col-md-6">
                                 <!-- Button -->
                                 <button class="btn btn-primary" type="submit">Update Password</button>
                             </div>
@@ -179,7 +186,7 @@
                                 <input type="hidden" name="passwordDelete" class="form-control" id="passwordDelete"
                                        value="<%= currentUser.getPassword()%>" required>
                             </div>
-                            <div class="col-12">
+                            <div class="mb-3 col-12 col-md-6">
                                 <!-- Button -->
                                 <button class="btn btn-danger" type="submit">Delete</button>
                             </div>
