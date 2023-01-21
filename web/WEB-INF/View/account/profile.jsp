@@ -61,7 +61,7 @@
                              class="avatar-xl rounded-circle" alt="" />
                     </div>
                     <div class="form-container py-2">
-                        <form action="/profile/profileImageUpdate" method="post">
+                        <form action="/profile/profileImageUpdate" method="post" enctype="multipart/form-data">
                             <div class="mb-3 col-12 col-md-6">
                                 <input class="form-control" type="file" id="formFile" name="profileImage">
                             </div>
