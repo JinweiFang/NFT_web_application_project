@@ -25,7 +25,7 @@ public class portfolioServlet extends HttpServlet {
             return;
         }
 
-        RequestDispatcher dispatcher = req.getRequestDispatcher(req.getContextPath() + "WEB-INF/View/account/profile.jsp");
+        RequestDispatcher dispatcher = req.getRequestDispatcher(req.getContextPath() + "WEB-INF/View/nft/portfolio.jsp");
         dispatcher.forward(req, resp);
     }
 
