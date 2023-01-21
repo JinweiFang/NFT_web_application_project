@@ -5,11 +5,10 @@ import Service.UserService;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import javax.servlet.http.*;
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.Base64;
 
 public class profileServlet extends HttpServlet {
     private UserService userService;
@@ -48,38 +47,56 @@ public class profileServlet extends HttpServlet {
             // Remove the first character and then split the url /hello/world -> [hello, world]
             String urls[] = req.getPathInfo().substring(1).split("/");
 
-            if (urls[0].equals("changePassword")) {
+            if(urls[0].equals("profileImageUpdate")) {
+                profileChangeUpdate(req, resp);
+            } else if (urls[0].equals("changePassword")) {
                 passwordChange(req, resp);
-            }
-
-            else if (urls[0].equals("changePersonalInfo")) {
+            } else if (urls[0].equals("changePersonalInfo")) {
                 personalInformationChange(req, resp);
-            }
-
-            else if (urls[0].equals("deleteAccount")) {
+            } else if (urls[0].equals("deleteAccount")) {
                 deleteAccount(req, resp);
             }
         }
     }
 
+    private void profileChangeUpdate(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+        User loggedUser = (User) req.getSession().getAttribute("user");
+
+        if (loggedUser != null) {
+            Part filePart = req.getPart("profileImage");
+            String fileType = filePart.getContentType();
+
+            byte[] imageBytes = filePart.getInputStream().readAllBytes();
+            String base64EncodedImage = Base64.getEncoder().encodeToString(imageBytes);
+
+            String imageUrl = "data:" + fileType + ";base64," + base64EncodedImage;
+
+            if(userService.updateProfileImage(loggedUser.getId(), imageUrl)) {
+                loggedUser.setProfileImage(imageUrl);
+                resp.sendRedirect(req.getContextPath() + "/profile?errmsg=3");
+                return;
+            }
+        }
+
+        resp.sendRedirect(req.getContextPath() + "/profile?errmsg=1");
+    }
+
     private void passwordChange(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         User loggedUser = (User) req.getSession().getAttribute("user");
 
-        // make sure logged user can only update their password
-        if(loggedUser == null || !loggedUser.getUsername().equals(req.getParameter("username"))) {
-            resp.sendRedirect(req.getContextPath() + "/profile?errmsg=1");
+        if(loggedUser != null) {
+
+            // check that the oldPassword is correct
+            User response = userService.authenticateUser(loggedUser.getUsername(), req.getParameter("oldPassword"));
+
+            if(response != null && userService.updateUserPassword(loggedUser.getUsername(), req.getParameter("newPassword"))) {
+                resp.sendRedirect("/profile?errmsg=4");
+                return;
+            }
         }
 
-        // check that the oldPassword is correct
-        User response = userService.authenticateUser(req.getParameter("username"), req.getParameter("oldPassword"));
-
-        // return error if the old password confirmation fails or the update fails
-        if(response == null || !userService.updateUserPassword(req.getParameter("username"), req.getParameter("newPassword"))) {
-            resp.sendRedirect(req.getContextPath() + "/profile?errmsg=2");
-        }
-        else {
-            resp.sendRedirect("/profile?errmsg=4");
-        }
+        resp.sendRedirect(req.getContextPath() + "/profile?errmsg=1");
     }
 
     private void personalInformationChange(HttpServletRequest req, HttpServletResponse resp) throws IOException {
@@ -113,6 +130,7 @@ public class profileServlet extends HttpServlet {
         if (loggedUser != null) {
             boolean deletionSuccess = userService.deleteUserById(String.valueOf(loggedUser.getId()));
             if (deletionSuccess) {
+                // this will automatically invalidate the session
                 resp.sendRedirect(req.getContextPath() + "/authenticate/logout");
                 return;
             }
