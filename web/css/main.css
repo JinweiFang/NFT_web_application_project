@@ -1,3 +1,8 @@
+.reset-a {
+    color: inherit;
+    text-decoration: none;
+}
+
 body {
     font-family: sans-serif;
 }
@@ -9,6 +14,11 @@ ul.nav li > .nav-link:focus {
 
 main {
     padding: 35px 15px 15px;
+}
+
+img.nft-card-img {
+    padding: 5%;
+    border-radius: 8%;
 }
 
 form.login,
@@ -30,4 +40,5 @@ form.login .form-row,
 form.signup .form-row {
     margin: 10px 0;
 }
+
 

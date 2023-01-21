@@ -37,6 +37,7 @@
                 </a>
                 <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser2" style="">
                     <li><a class="dropdown-item" href="${pageContext.request.contextPath}/dashboard">Dashboard</a></li>
+                    <li><a class="dropdown-item" href="${pageContext.request.contextPath}/portfolio">My Portfolio</a></li>
                     <% if (currentUser.isAdmin()) {%>
                     <li><a class="dropdown-item" href="${pageContext.request.contextPath}/admin/account-list">Account List</a></li>
                     <% } %>

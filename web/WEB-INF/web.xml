@@ -29,6 +29,10 @@
         <servlet-name>adminServlet</servlet-name>
         <servlet-class>Controller.adminServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>portfolioServlet</servlet-name>
+        <servlet-class>Controller.portfolioServlet</servlet-class>
+    </servlet>
 
     <!--  Map a servlet to a url  -->
     <servlet-mapping>
@@ -46,5 +50,9 @@
     <servlet-mapping>
         <servlet-name>adminServlet</servlet-name>
         <url-pattern>/admin/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>portfolioServlet</servlet-name>
+        <url-pattern>/portfolio/*</url-pattern>
     </servlet-mapping>
 </web-app>

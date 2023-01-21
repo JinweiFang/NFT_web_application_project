@@ -9,10 +9,17 @@
 <%@ include file="../Templates/Header.jsp" %>
 <main class="container-fluid">
     <div class="container-sm">
-        <h3>Welcome, <%= currentUser.getfName()%>!</h3>
-        <% if (currentUser.getIsAdmin() == 1) {%>
-        <h5>I am an admin!</h5>
-        <% } %>
+        <div class="container">
+            <div class="row border rounded-2 border-2 p-2 pt-3 my-2">
+                <a class="reset-a" href="${pageContext.request.contextPath}/portfolio">
+                    <h5>My Balance</h5>
+                    <h4 class="ps-4">$<%= currentUser.getBalance()%></h4>
+                </a>
+            </div>
+            <div class="row border rounded-2 border-2 p-2 my-2">
+                <h5>Watch List</h5>
+            </div>
+        </div>
     </div>
 </main>
 <%@ include file="../Templates/Footer.jsp" %>
