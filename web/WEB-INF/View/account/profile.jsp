@@ -61,8 +61,15 @@
                              class="avatar-xl rounded-circle" alt="" />
                     </div>
                     <div class="form-container py-2">
-                        <a href="#" class="btn btn-outline-white btn-sm px-3 pl-10">Update</a>
-                        <a href="#" class="btn btn-outline-danger btn-sm px-6">Delete</a>
+                        <form action="/profile/profileImageUpdate" method="post">
+                            <div class="mb-3 col-12 col-md-6">
+                                <input class="form-control" type="file" id="formFile" name="profileImage">
+                            </div>
+                            <div class="mb-3 col-12 col-md-6">
+                                <button class="btn btn-primary" type="submit">Update</button>
+<%--                                <button class="btn btn-danger" type="submit">Delete</button>--%>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -113,7 +120,7 @@
                                 <input type="hidden" name="usernameValidate" class="form-control" id="usernameValidate"
                                        value="<%= currentUser.getUsername()%>" required>
                             </div>
-                            <div class="col-12">
+                            <div class="mb-3 col-12 col-md-6">
                                 <!-- Button -->
                                 <button class="btn btn-primary" type="submit">Update Profile</button>
                             </div>
@@ -152,7 +159,7 @@
                                        placeholder="Password"
                                        required/>
                             </div>
-                            <div class="col-12">
+                            <div class="mb-3 col-12 col-md-6">
                                 <!-- Button -->
                                 <button class="btn btn-primary" type="submit">Update Password</button>
                             </div>
@@ -179,7 +186,7 @@
                                 <input type="hidden" name="passwordDelete" class="form-control" id="passwordDelete"
                                        value="<%= currentUser.getPassword()%>" required>
                             </div>
-                            <div class="col-12">
+                            <div class="mb-3 col-12 col-md-6">
                                 <!-- Button -->
                                 <button class="btn btn-danger" type="submit">Delete</button>
                             </div>
