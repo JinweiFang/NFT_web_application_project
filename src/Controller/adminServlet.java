@@ -1,6 +1,7 @@
 package Controller;
 
 import Domain.User;
+import Service.AccountManagement;
 import Service.UserService;
 
 import javax.servlet.RequestDispatcher;
@@ -13,19 +14,19 @@ import java.io.IOException;
 import java.util.List;
 
 public class adminServlet extends HttpServlet {
+    private AccountManagement accountManagement;
     private UserService userService;
 
     @Override
     public void init() throws ServletException {
         this.userService = new UserService();
+        this.accountManagement = new AccountManagement(this.userService);
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         // Must be admin to access this page
-        HttpSession session = req.getSession(false);
-        User loggedUser = (session == null) ? null : (User) session.getAttribute("user");
-        if(loggedUser == null || !loggedUser.isAdmin()) {
+        if(!accountManagement.authAdmin(req)) {
             resp.sendRedirect(req.getContextPath() + "/dashboard");
             return;
         }
@@ -38,9 +39,7 @@ public class adminServlet extends HttpServlet {
 
             // Route -> /admin/account-list
             if(urls[0].equals("account-list")) {
-                List<User> users = userService.getAllUsers();
-
-                req.setAttribute("users", users);
+                req.setAttribute("users", userService.getAllUsers());
                 RequestDispatcher dispatcher = req.getRequestDispatcher(req.getContextPath() + "/WEB-INF/View/account/account-list.jsp");
                 dispatcher.forward(req, resp);
                 return;
@@ -53,9 +52,7 @@ public class adminServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         // Must be admin to access this page
-        HttpSession session = req.getSession(false);
-        User loggedUser = (session == null) ? null : (User) session.getAttribute("user");
-        if(loggedUser == null || !loggedUser.isAdmin()) {
+        if(accountManagement.authAdmin(req)) {
             resp.sendRedirect(req.getContextPath() + "/dashboard");
             return;
         }
@@ -67,63 +64,11 @@ public class adminServlet extends HttpServlet {
             String urls[] = req.getPathInfo().substring(1).split("/");
 
             // Route -> /admin/register
-            if(urls[0].equals("register")) handleRegistration(req, resp);
+            if(urls[0].equals("register")) accountManagement.handleRegistration(req, resp);
             // Route -> /admin/update
-            else if(urls[0].equals("update")) handleUpdate(req, resp);
+            else if(urls[0].equals("update")) accountManagement.handleUpdate(req, resp);
             // Route -> /admin/delete
-            else if(urls[0].equals("delete")) handleDeletion(req, resp);
+            else if(urls[0].equals("delete")) accountManagement.handleDeletion(req, resp);
         }
-    }
-
-    private void handleRegistration(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        boolean registrationSuccess = userService.registerUser(req.getParameter("fName"), req.getParameter("lName"),
-                req.getParameter("email"), req.getParameter("username"), req.getParameter("password"), req.getParameter("accountType"), req.getParameter("secAns1"),
-                req.getParameter("secAns2"), req.getParameter("secAns3"));
-
-        if(registrationSuccess) {
-            resp.sendRedirect(req.getContextPath() + "/admin/account-list?successmsg=1");
-            return;
-        }
-
-        // Redirect back to account list if registration failed
-        resp.sendRedirect(req.getContextPath() + "/admin/account-list?errmsg=1");
-    }
-
-    private void handleUpdate(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        boolean updateSuccess = userService.updateUserById(req.getParameter("id"), req.getParameter("fName"), req.getParameter("lName"),
-                req.getParameter("email"), req.getParameter("username"), req.getParameter("password"),
-                req.getParameter("accountType"), req.getParameter("secAns1"), req.getParameter("secAns2"), req.getParameter("secAns3"));
-
-        if(updateSuccess) {
-            HttpSession session = req.getSession(false);
-            User loggedUser = (session == null) ? null : (User) session.getAttribute("user");
-
-            if (loggedUser.getId() == Integer.parseInt(req.getParameter("id"))) {
-                loggedUser.setfName(req.getParameter("fName"));
-                loggedUser.setlName(req.getParameter("lName"));
-                loggedUser.setEmail(req.getParameter("email"));
-                loggedUser.setUsername(req.getParameter("username"));
-                loggedUser.setIsAdmin(Integer.parseInt(req.getParameter("accountType")));
-                loggedUser.setSecAnswers(req.getParameter("secAns1"), req.getParameter("secAns2"), req.getParameter("secAns3"));
-                if (!req.getParameter("password").isBlank()) loggedUser.setPassword(req.getParameter("password"));
-            }
-            resp.sendRedirect(req.getContextPath() + "/admin/account-list?successmsg=1");
-            return;
-        }
-
-        // Redirect back to account list if registration failed
-        resp.sendRedirect(req.getContextPath() + "/admin/account-list?errmsg=1");
-    }
-
-    private void handleDeletion(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        boolean deletionSuccess = userService.deleteUserById(req.getParameter("id"));
-
-        if(deletionSuccess) {
-            resp.sendRedirect(req.getContextPath() + "/admin/account-list?successmsg=1");
-            return;
-        }
-
-        // Redirect back to account list if registration failed
-        resp.sendRedirect(req.getContextPath() + "/admin/account-list?errmsg=1");
     }
 }

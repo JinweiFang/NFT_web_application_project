@@ -19,6 +19,10 @@ public class AccountManagement {
         HttpSession session = req.getSession(false);
         return (session == null) ? null : (User) session.getAttribute("user");
     }
+
+    public boolean authAdmin(HttpServletRequest req) {
+        return getUser(req).isAdmin();
+    }
     public void passwordChange(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         User loggedUser = (User) req.getSession().getAttribute("user");
 
@@ -79,5 +83,57 @@ public class AccountManagement {
         }
 
         resp.sendRedirect(req.getContextPath() + "/profile?errmsg=1");
+    }
+
+    public void handleRegistration(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        boolean registrationSuccess = userService.registerUser(req.getParameter("fName"), req.getParameter("lName"),
+                req.getParameter("email"), req.getParameter("username"), req.getParameter("password"), req.getParameter("accountType"), req.getParameter("secAns1"),
+                req.getParameter("secAns2"), req.getParameter("secAns3"));
+
+        if(registrationSuccess) {
+            resp.sendRedirect(req.getContextPath() + "/admin/account-list?successmsg=1");
+            return;
+        }
+
+        // Redirect back to account list if registration failed
+        resp.sendRedirect(req.getContextPath() + "/admin/account-list?errmsg=1");
+    }
+
+    public void handleUpdate(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        boolean updateSuccess = userService.updateUserById(req.getParameter("id"), req.getParameter("fName"), req.getParameter("lName"),
+                req.getParameter("email"), req.getParameter("username"), req.getParameter("password"),
+                req.getParameter("accountType"), req.getParameter("secAns1"), req.getParameter("secAns2"), req.getParameter("secAns3"));
+
+        if(updateSuccess) {
+            HttpSession session = req.getSession(false);
+            User loggedUser = (session == null) ? null : (User) session.getAttribute("user");
+
+            if (loggedUser.getId() == Integer.parseInt(req.getParameter("id"))) {
+                loggedUser.setfName(req.getParameter("fName"));
+                loggedUser.setlName(req.getParameter("lName"));
+                loggedUser.setEmail(req.getParameter("email"));
+                loggedUser.setUsername(req.getParameter("username"));
+                loggedUser.setIsAdmin(Integer.parseInt(req.getParameter("accountType")));
+                loggedUser.setSecAnswers(req.getParameter("secAns1"), req.getParameter("secAns2"), req.getParameter("secAns3"));
+                if (!req.getParameter("password").isBlank()) loggedUser.setPassword(req.getParameter("password"));
+            }
+            resp.sendRedirect(req.getContextPath() + "/admin/account-list?successmsg=1");
+            return;
+        }
+
+        // Redirect back to account list if registration failed
+        resp.sendRedirect(req.getContextPath() + "/admin/account-list?errmsg=1");
+    }
+
+    public void handleDeletion(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        boolean deletionSuccess = userService.deleteUserById(req.getParameter("id"));
+
+        if(deletionSuccess) {
+            resp.sendRedirect(req.getContextPath() + "/admin/account-list?successmsg=1");
+            return;
+        }
+
+        // Redirect back to account list if registration failed
+        resp.sendRedirect(req.getContextPath() + "/admin/account-list?errmsg=1");
     }
 }
