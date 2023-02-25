@@ -1,7 +1,6 @@
 package Controller;
 
-import Domain.User;
-import Service.AccountManagement;
+import Service.AccountManagementService;
 import Service.UserService;
 
 import javax.servlet.RequestDispatcher;
@@ -9,15 +8,14 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 public class profileServlet extends HttpServlet {
-    private AccountManagement accountManagement;
+    private AccountManagementService accountManagement;
 
     @Override
     public void init() {
-        this.accountManagement = new AccountManagement(new UserService());
+        this.accountManagement = new AccountManagementService(new UserService());
     }
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

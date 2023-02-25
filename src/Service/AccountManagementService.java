@@ -9,10 +9,10 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
 
-public class AccountManagement {
+public class AccountManagementService {
     private UserService userService;
 
-    public AccountManagement(UserService userService){
+    public AccountManagementService(UserService userService){
         this.userService = userService;
     }
 
