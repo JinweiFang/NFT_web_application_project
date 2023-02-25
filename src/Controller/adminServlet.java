@@ -52,7 +52,7 @@ public class adminServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         // Must be admin to access this page
-        if(accountManagement.authAdmin(req)) {
+        if(!accountManagement.authAdmin(req)) {
             resp.sendRedirect(req.getContextPath() + "/dashboard");
             return;
         }
