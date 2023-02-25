@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.List;
 
 public class AccountManagement {
     private UserService userService;
@@ -20,9 +21,10 @@ public class AccountManagement {
         return (session == null) ? null : (User) session.getAttribute("user");
     }
 
-    public boolean authAdmin(HttpServletRequest req) {
-        return getUser(req).isAdmin();
+    public List<User> getUserList(){
+        return userService.getAllUsers();
     }
+
     public void passwordChange(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         User loggedUser = (User) req.getSession().getAttribute("user");
 

@@ -15,12 +15,10 @@ import java.util.List;
 
 public class adminServlet extends HttpServlet {
     private AccountManagement accountManagement;
-    private UserService userService;
 
     @Override
     public void init() throws ServletException {
-        this.userService = new UserService();
-        this.accountManagement = new AccountManagement(this.userService);
+        this.accountManagement = new AccountManagement(new UserService());
     }
 
     @Override
@@ -39,7 +37,7 @@ public class adminServlet extends HttpServlet {
 
             // Route -> /admin/account-list
             if(urls[0].equals("account-list")) {
-                req.setAttribute("users", userService.getAllUsers());
+                req.setAttribute("users", accountManagement.getUserList());
                 RequestDispatcher dispatcher = req.getRequestDispatcher(req.getContextPath() + "/WEB-INF/View/account/account-list.jsp");
                 dispatcher.forward(req, resp);
                 return;

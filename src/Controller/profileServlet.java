@@ -13,7 +13,6 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 public class profileServlet extends HttpServlet {
-    private UserService userService;
     private AccountManagement accountManagement;
 
     @Override
