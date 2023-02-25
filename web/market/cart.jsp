@@ -40,7 +40,7 @@
                 <h4>Your current balance is $130.12.</h4>
                 <h4>The total cost of the items in your cart is $110.00.</h4>
                 <div class="form-row">
-                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <button type="submit" name="submit-button" class="btn btn-primary">Submit</button>
                 </div>
             </fieldset>
         </form>

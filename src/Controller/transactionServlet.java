@@ -54,6 +54,7 @@ public class transactionServlet extends HttpServlet {
     private void handleCart(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         //int[] cart = (int[]) session.getAttribute("cart");
         String button = req.getParameter("remove-button");
+        String submitButton = req.getParameter("submit-button");
         if(button != null){
             removeCartItem(req.getSession(true), Integer.parseInt(button));
             resp.sendRedirect(req.getContextPath() + "/market/cart.jsp");
@@ -61,13 +62,18 @@ public class transactionServlet extends HttpServlet {
         }
         HttpSession s = req.getSession(true);
 
-        boolean success = attemptTransaction((User) s.getAttribute("user"), (ArrayList<Integer>) s.getAttribute("cart"));
-        if(success){
-            clearCart(s);
-            resp.sendRedirect(req.getContextPath() + "/market/cart.jsp?succmsg=1");
+        if(submitButton != null){
+            boolean success = attemptTransaction((User) s.getAttribute("user"), (ArrayList<Integer>) s.getAttribute("cart"));
+            if(success){
+                clearCart(s);
+                resp.sendRedirect(req.getContextPath() + "/market/cart.jsp?succmsg=1");
+                return;
+            }
+            resp.sendRedirect(req.getContextPath() + "/market/cart.jsp?errmsg=1");
             return;
         }
-        resp.sendRedirect(req.getContextPath() + "/market/cart.jsp?errmsg=1");
+
+        resp.sendRedirect(req.getContextPath() + "/market/cart.jsp");
         return;
     }
 
